@@ -8,4 +8,8 @@ public interface ISinglePlayerPresenter {
     void onRoll();
 
     void onSettings();
+
+    void checkSelection();
+
+    void checkListEntries();
 }

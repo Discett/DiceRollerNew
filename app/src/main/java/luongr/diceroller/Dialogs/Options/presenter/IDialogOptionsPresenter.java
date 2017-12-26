@@ -6,4 +6,6 @@ package luongr.diceroller.Dialogs.Options.presenter;
 
 public interface IDialogOptionsPresenter {
     void onPresetSelection(int x);
+
+    void setMaxSelection(int i);
 }

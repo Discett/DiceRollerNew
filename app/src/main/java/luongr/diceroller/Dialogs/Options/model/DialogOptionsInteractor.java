@@ -16,4 +16,8 @@ public class DialogOptionsInteractor {
     public void onPresetSelection(int x) {
         dice.setDice(x);
     }
+
+    public void onMaxSelection(int i) {
+        dice.setNumberOfSelections(i);
+    }
 }

@@ -20,4 +20,9 @@ public class DialogOptionsPresenter implements IDialogOptionsPresenter{
     public void onPresetSelection(int x) {
         interactor.onPresetSelection(x);
     }
+
+    @Override
+    public void setMaxSelection(int i) {
+        interactor.onMaxSelection(i);
+    }
 }

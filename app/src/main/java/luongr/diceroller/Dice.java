@@ -8,11 +8,23 @@ import java.util.Random;
 
 public class Dice implements IDice {
     private static volatile Dice diceInstance = new Dice();
-    int diceSides = 6;
-    int diceSidesRange = 6;
-    int numberOfSelections = 0;
+    private int diceSides = 6;
+    private int diceSidesRange = 6;
+    private int numberOfSelections = 0;
 
     private Dice() {
+    }
+
+    public int getDiceSides() {
+        return diceSides;
+    }
+
+    public int getDiceSidesRange() {
+        return diceSidesRange;
+    }
+
+    public int getNumberOfSelections() {
+        return numberOfSelections;
     }
 
     public static Dice getInstance(){

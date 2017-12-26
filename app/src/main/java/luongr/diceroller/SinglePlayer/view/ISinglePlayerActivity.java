@@ -10,4 +10,8 @@ public interface ISinglePlayerActivity {
     void setTxtRoll(int roll);
 
     void showSettingsDialog();
+
+    void showEdtSelections();
+
+    void hideEdtSelections();
 }
