@@ -20,7 +20,11 @@ public class SinglePlayerInteractor {
     }
 
     public void onRoll(Callback callback) {
-        callback.onRolled(dice.rollDice());
+        if(selectionAvailable){
+            callback.onSelectionRoll();
+        } else {
+            callback.onRolled(dice.rollDice());
+        }
     }
 
     public void onSettings(Callback callback) {
@@ -45,6 +49,17 @@ public class SinglePlayerInteractor {
         }
     }
 
+    public void onAddSelection(String selection, Callback callback) {
+        if(!selection.isEmpty()){
+            Selection addSelection = new Selection(selection);
+            selectionList.add(addSelection);
+        }
+    }
+
+    public List<Selection> getSelectionList() {
+        return selectionList;
+    }
+
     public interface Callback{
         void onRolled(int roll);
 
@@ -57,5 +72,11 @@ public class SinglePlayerInteractor {
         void showEdtSelections();
 
         void hideEdtSelections();
+
+        void onEmptySelection();
+
+        void onValidSelection();
+
+        void onSelectionRoll();
     }
 }

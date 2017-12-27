@@ -8,5 +8,6 @@
     <string name="current_dice_selected">Current Dice Selection: %1$d</string>
     <string name="current_dice_range_selected">Current Dice Range: %1$d - %2$d</string>
     <string name="current_number_of_selections">Max Selections: %1$d</string>
+    <string name="error_invalid">Invalid: %1$s</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package luongr.diceroller.SinglePlayer.view;
 
 import android.content.DialogInterface;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,23 +13,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
 import luongr.diceroller.Dialogs.Options.view.DialogOptions;
-import luongr.diceroller.Dice;
 import luongr.diceroller.R;
-import luongr.diceroller.Selection;
 import luongr.diceroller.SinglePlayer.model.SinglePlayerInteractor;
 import luongr.diceroller.SinglePlayer.presenter.ISinglePlayerPresenter;
 import luongr.diceroller.SinglePlayer.presenter.SinglePlayerPresenter;
 
-public class SinglePlayerActivity extends AppCompatActivity implements ISinglePlayerActivity {
+public class SinglePlayerActivity extends AppCompatActivity implements ISinglePlayerActivity{
     @BindView(R.id.btnRoll)
     Button btnRoll;
     @BindView(R.id.btnAddSelection)
@@ -47,6 +42,7 @@ public class SinglePlayerActivity extends AppCompatActivity implements ISinglePl
 
     ISinglePlayerPresenter presenter;
     SinglePlayerInteractor interactor;
+    SelectionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +50,11 @@ public class SinglePlayerActivity extends AppCompatActivity implements ISinglePl
         setContentView(R.layout.activity_single_player);
         ButterKnife.bind(this);
         setSupportActionBar(tbToolbar);
-        setUpRecyclerView();
         interactor = new SinglePlayerInteractor();
         presenter = new SinglePlayerPresenter(this,interactor);
         presenter.checkSelection();
         presenter.checkListEntries();
+        setUpRecyclerView();
     }
 
     @Override
@@ -67,8 +63,14 @@ public class SinglePlayerActivity extends AppCompatActivity implements ISinglePl
     }
 
     private void setUpRecyclerView() {
-        //rvSelection.setAdapter(new SelectionAdapter(this,));
-        //rvSelection.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SelectionAdapter(this, presenter.getSelectionList(), new SelectionAdapter.Callback() {
+            @Override
+            public void onRemoved() {
+                presenter.checkListEntries();
+            }
+        });
+        rvSelection.setAdapter(adapter);
+        rvSelection.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -87,6 +89,14 @@ public class SinglePlayerActivity extends AppCompatActivity implements ISinglePl
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @OnClick(R.id.btnAddSelection)
+    public void onAdd(){
+        Log.d("AddSelection", edtSelection.getText().toString());
+        presenter.onAddSelection(edtSelection.getText().toString());
+        adapter.notifyDataSetChanged();
+        presenter.checkListEntries();
     }
 
     @OnClick(R.id.btnRoll)
@@ -132,5 +142,21 @@ public class SinglePlayerActivity extends AppCompatActivity implements ISinglePl
     public void hideEdtSelections() {
         edtSelection.setVisibility(View.INVISIBLE);
         btnAddSelection.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showEmptySelection() {
+        Toast.makeText(this, getString(R.string.error_invalid,"Suggestion"), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showOnValidSelection() {
+        Log.d("showOnValidSelection","This");
+    }
+
+    @Override
+    public void onSelectionRoll() {
+        adapter.onRoll();
+        adapter.notifyDataSetChanged();
     }
 }

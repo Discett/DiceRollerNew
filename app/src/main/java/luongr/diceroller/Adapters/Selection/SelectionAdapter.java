@@ -12,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import luongr.diceroller.Dice;
 import luongr.diceroller.R;
 import luongr.diceroller.Selection;
 
@@ -19,12 +20,15 @@ import luongr.diceroller.Selection;
  * Created by Luong Randy on 12/26/2017.
  */
 
-public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.ViewHolder> {
+public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.ViewHolder> implements ISelectionAdapter {
     private Context context;
     private List<Selection> selectionList;
+    private Callback callback;
+    private Dice dice;
 
-    public SelectionAdapter(Context context, List<Selection> selectionList) {
+    public SelectionAdapter(Context context, List<Selection> selectionList, Callback callback) {
         this.context = context;
+        this.callback = callback;
         this.selectionList = selectionList;
     }
 
@@ -32,8 +36,17 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_selection,parent,false);
-
-        return new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        dice = Dice.getInstance();
+        viewHolder.btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectionList.remove(viewHolder.getAdapterPosition());
+                notifyDataSetChanged();
+                callback.onRemoved();
+            }
+        });
+        return viewHolder;
     }
 
     @Override
@@ -51,6 +64,13 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.View
         return selectionList.size();
     }
 
+    @Override
+    public void onRoll() {
+        for(Selection item:selectionList){
+            item.setRollResult(dice.rollDice());
+        }
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.txtSelectionName)
         TextView txtSelectionName;
@@ -62,5 +82,8 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.View
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+    public interface Callback{
+        void onRemoved();
     }
 }

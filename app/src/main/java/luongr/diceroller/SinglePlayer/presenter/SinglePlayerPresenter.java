@@ -1,5 +1,8 @@
 package luongr.diceroller.SinglePlayer.presenter;
 
+import java.util.List;
+
+import luongr.diceroller.Selection;
 import luongr.diceroller.SinglePlayer.model.SinglePlayerInteractor;
 import luongr.diceroller.SinglePlayer.view.ISinglePlayerActivity;
 
@@ -48,6 +51,21 @@ public class SinglePlayerPresenter implements ISinglePlayerPresenter{
             public void hideEdtSelections() {
 
             }
+
+            @Override
+            public void onEmptySelection() {
+
+            }
+
+            @Override
+            public void onValidSelection() {
+
+            }
+
+            @Override
+            public void onSelectionRoll() {
+                view.onSelectionRoll();
+            }
         });
     }
 
@@ -81,6 +99,21 @@ public class SinglePlayerPresenter implements ISinglePlayerPresenter{
 
             @Override
             public void hideEdtSelections() {
+
+            }
+
+            @Override
+            public void onEmptySelection() {
+
+            }
+
+            @Override
+            public void onValidSelection() {
+
+            }
+
+            @Override
+            public void onSelectionRoll() {
 
             }
         });
@@ -118,6 +151,21 @@ public class SinglePlayerPresenter implements ISinglePlayerPresenter{
             public void hideEdtSelections() {
 
             }
+
+            @Override
+            public void onEmptySelection() {
+
+            }
+
+            @Override
+            public void onValidSelection() {
+
+            }
+
+            @Override
+            public void onSelectionRoll() {
+
+            }
         });
     }
 
@@ -153,6 +201,76 @@ public class SinglePlayerPresenter implements ISinglePlayerPresenter{
             public void hideEdtSelections() {
                 view.hideEdtSelections();
             }
+
+            @Override
+            public void onEmptySelection() {
+
+            }
+
+            @Override
+            public void onValidSelection() {
+
+            }
+
+            @Override
+            public void onSelectionRoll() {
+
+            }
         });
+    }
+
+    @Override
+    public void onAddSelection(String selection) {
+        interactor.onAddSelection(selection, new SinglePlayerInteractor.Callback() {
+            @Override
+            public void onRolled(int roll) {
+
+            }
+
+            @Override
+            public void onSettings() {
+
+            }
+
+            @Override
+            public void onNoSelection() {
+
+            }
+
+            @Override
+            public void onAvailableSelections() {
+
+            }
+
+            @Override
+            public void showEdtSelections() {
+
+            }
+
+            @Override
+            public void hideEdtSelections() {
+
+            }
+
+            @Override
+            public void onEmptySelection() {
+                view.showEmptySelection();
+            }
+
+            @Override
+            public void onValidSelection() {
+                view.showOnValidSelection();
+            }
+
+            @Override
+            public void onSelectionRoll() {
+
+            }
+        });
+    }
+
+    @Override
+    public List<Selection> getSelectionList() {
+        return interactor.getSelectionList();
     }
 }
