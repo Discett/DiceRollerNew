@@ -8,4 +8,12 @@ public interface IDialogOptionsPresenter {
     void onPresetSelection(int x);
 
     void setMaxSelection(int i);
+
+    void getDiceInfo();
+
+    void setUpSeekBar();
+
+    void onCustomDiceFieldOne(String value);
+
+    void onCustomDiceFieldTwo(String value);
 }

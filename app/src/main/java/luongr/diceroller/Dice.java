@@ -11,6 +11,7 @@ public class Dice implements IDice {
     private int diceSides = 6;
     private int diceSidesRange = 6;
     private int numberOfSelections = 0;
+    private int MAX_NUMBER_OF_SELECTIONS = 25;
 
     private Dice() {
     }
@@ -61,5 +62,9 @@ public class Dice implements IDice {
     @Override
     public void setNumberOfSelections(int x) {
         this.numberOfSelections = x;
+    }
+
+    public int getMaxNumberOfSelections() {
+        return MAX_NUMBER_OF_SELECTIONS;
     }
 }
