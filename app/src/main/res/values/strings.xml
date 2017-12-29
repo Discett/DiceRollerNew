@@ -10,5 +10,6 @@
     <string name="current_number_of_selections">Max Selections: %1$d</string>
     <string name="error_invalid">Invalid: %1$s</string>
     <string name="set_custom_range">Set custom dice range</string>
-
+    <string name="join">Join</string>
+    <string name="host">Host</string>
 </resources>
