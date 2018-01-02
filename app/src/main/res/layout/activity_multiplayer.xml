@@ -12,12 +12,6 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <fragment
-            android:name="luongr.diceroller.Multiplayer.fragment.MultiplayerStartFragment.view.MultiplayerStartFragment"
-            android:id="@+id/fragmentStartMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </fragment>
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
