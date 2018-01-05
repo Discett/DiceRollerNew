@@ -2,6 +2,8 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter
 
 import android.bluetooth.BluetoothDevice;
 
+import java.util.List;
+
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.model.MultiplayerJoinInteractor;
 
 /**
@@ -24,5 +26,10 @@ public class MutliplayerJoinPresenter implements IMultiplayerJoinPresenter{
     @Override
     public void onRemoveDevice() {
 
+    }
+
+    @Override
+    public List<BluetoothDevice> getDeviceList() {
+        return interactor.getDeviceList();
     }
 }

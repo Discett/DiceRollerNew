@@ -14,13 +14,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import luongr.diceroller.Multiplayer.adapter.DevicesScannedAdapter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.model.MultiplayerJoinInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter.IMultiplayerJoinPresenter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter.MutliplayerJoinPresenter;
@@ -36,8 +40,12 @@ public class MultiplayerJoinFragment extends Fragment {
     private static final int REQUEST_ACCESS_COARSE_LOCATION = 2;
     private static final int RESULT_CANCELED = 0;
 
+    @BindView(R.id.rvJoinSelection)
+    RecyclerView rvJoinSelection;
+
     IMultiplayerListener listener;
     IMultiplayerJoinPresenter presenter;
+    DevicesScannedAdapter adapter;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -48,6 +56,7 @@ public class MultiplayerJoinFragment extends Fragment {
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 presenter.onAddDevice(device);
+                adapter.notifyDataSetChanged();
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
                 Log.d("JoinFragment","device: " + deviceName);
@@ -63,9 +72,16 @@ public class MultiplayerJoinFragment extends Fragment {
         ButterKnife.bind(this,view);
         presenter = new MutliplayerJoinPresenter(new MultiplayerJoinInteractor());
         checkPermissions();
+        setUpRV();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         getContext().registerReceiver(receiver, filter);
         return view;
+    }
+
+    private void setUpRV() {
+        adapter = new DevicesScannedAdapter(getContext(),presenter.getDeviceList());
+        rvJoinSelection.setAdapter(adapter);
+        rvJoinSelection.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
