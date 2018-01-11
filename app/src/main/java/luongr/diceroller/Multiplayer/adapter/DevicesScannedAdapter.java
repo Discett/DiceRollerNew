@@ -22,17 +22,26 @@ public class DevicesScannedAdapter extends RecyclerView.Adapter<DevicesScannedAd
     //TODO: replace this with MultiplayerHost object
     List<BluetoothDevice> bluetoothDeviceList;
     Context context;
+    IDevicesScannedAdapter listener;
 
-    public DevicesScannedAdapter(Context context, List<BluetoothDevice> bluetoothDeviceList) {
+    public DevicesScannedAdapter(Context context,IDevicesScannedAdapter listener,List<BluetoothDevice> bluetoothDeviceList) {
         this.context = context;
         this.bluetoothDeviceList = bluetoothDeviceList;
+        this.listener = listener;
     }
 
     @Override
     public DevicesScannedAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_list_of_hosts,parent,false);
-        return new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onHostSelected(bluetoothDeviceList.get(viewHolder.getAdapterPosition()));
+            }
+        });
+        return viewHolder;
     }
 
     @Override

@@ -25,16 +25,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Multiplayer.adapter.DevicesScannedAdapter;
+import luongr.diceroller.Multiplayer.adapter.IDevicesScannedAdapter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.model.MultiplayerJoinInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter.IMultiplayerJoinPresenter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter.MutliplayerJoinPresenter;
+import luongr.diceroller.Multiplayer.thread.JoinServerThread;
 import luongr.diceroller.R;
 
 /**
  * Created by Luong Randy on 1/2/2018.
  */
 
-public class MultiplayerJoinFragment extends Fragment {
+public class MultiplayerJoinFragment extends Fragment implements IDevicesScannedAdapter {
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_ACCESS_COARSE_LOCATION = 2;
@@ -79,7 +81,7 @@ public class MultiplayerJoinFragment extends Fragment {
     }
 
     private void setUpRV() {
-        adapter = new DevicesScannedAdapter(getContext(),presenter.getDeviceList());
+        adapter = new DevicesScannedAdapter(getContext(),this,presenter.getDeviceList());
         rvJoinSelection.setAdapter(adapter);
         rvJoinSelection.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -140,6 +142,12 @@ public class MultiplayerJoinFragment extends Fragment {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_ACCESS_COARSE_LOCATION);
         }
+    }
+
+    @Override
+    public void onHostSelected(BluetoothDevice device) {
+        JoinServerThread joinServerThread = new JoinServerThread(device);
+        joinServerThread.start();
     }
 
     public interface IMultiplayerListener{

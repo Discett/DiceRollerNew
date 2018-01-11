@@ -1,6 +1,7 @@
 package luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import luongr.diceroller.Multiplayer.thread.HostServerThread;
 import luongr.diceroller.R;
 
 /**
@@ -37,6 +39,9 @@ public class MultiplayerHostFragment extends Fragment {
     @OnClick(R.id.btnStart)
     public void onStartPressed(){
         startDiscovery();
+        HostServerThread hostServerThread = new HostServerThread();
+        hostServerThread.start();
+        Log.d("HostFragment","Thread:" + hostServerThread.isAlive());
     }
 
 
