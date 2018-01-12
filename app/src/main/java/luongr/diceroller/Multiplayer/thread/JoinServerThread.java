@@ -8,6 +8,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.UUID;
 
+import luongr.diceroller.R;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -23,9 +25,14 @@ public class JoinServerThread extends Thread {
     public JoinServerThread(BluetoothDevice device) {
         // Use a temporary object that is later assigned to mmSocket
         // because mmSocket is final.
+        //TODO replace our UUID with a common one, probably bad form to do it our way
         BluetoothSocket tmp = null;
         mmDevice = device;
-        MY_UUID = UUID.nameUUIDFromBytes(mmDevice.getName().getBytes());
+        if(mmDevice.getName() != null){
+            MY_UUID = UUID.nameUUIDFromBytes(mmDevice.getName().getBytes());
+        } else {
+            MY_UUID = UUID.nameUUIDFromBytes("stump!".getBytes());
+        }
 
         try {
             // Get a BluetoothSocket to connect with the given BluetoothDevice.
@@ -58,6 +65,7 @@ public class JoinServerThread extends Thread {
 
         // The connection attempt succeeded. Perform work associated with
         // the connection in a separate thread.
+
         //manageMyConnectedSocket(mmSocket);
     }
 

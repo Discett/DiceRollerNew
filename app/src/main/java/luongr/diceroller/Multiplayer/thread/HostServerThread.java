@@ -50,7 +50,9 @@ public class HostServerThread extends Thread {
             if (socket != null) {
                 // A connection was accepted. Perform work associated with
                 // the connection in a separate thread.
+
                 //manageMyConnectedSocket(socket);
+
                 try {
                     mmServerSocket.close();
                 } catch (IOException e) {

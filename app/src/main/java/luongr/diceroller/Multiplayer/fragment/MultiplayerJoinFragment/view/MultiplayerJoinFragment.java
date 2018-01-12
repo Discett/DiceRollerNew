@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,27 +24,27 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Multiplayer.adapter.DevicesScannedAdapter;
-import luongr.diceroller.Multiplayer.adapter.IDevicesScannedAdapter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.model.MultiplayerJoinInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter.IMultiplayerJoinPresenter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.presenter.MutliplayerJoinPresenter;
 import luongr.diceroller.Multiplayer.thread.JoinServerThread;
 import luongr.diceroller.R;
 
+import static android.app.Activity.RESULT_CANCELED;
+
 /**
  * Created by Luong Randy on 1/2/2018.
  */
 
-public class MultiplayerJoinFragment extends Fragment implements IDevicesScannedAdapter {
+public class MultiplayerJoinFragment extends Fragment {
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_ACCESS_COARSE_LOCATION = 2;
-    private static final int RESULT_CANCELED = 0;
 
     @BindView(R.id.rvJoinSelection)
     RecyclerView rvJoinSelection;
 
-    IMultiplayerListener listener;
+    IMultiplayerJoinListener listener;
     IMultiplayerJoinPresenter presenter;
     DevicesScannedAdapter adapter;
 
@@ -59,9 +58,9 @@ public class MultiplayerJoinFragment extends Fragment implements IDevicesScanned
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 presenter.onAddDevice(device);
                 adapter.notifyDataSetChanged();
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-                Log.d("JoinFragment","device: " + deviceName);
+                //String deviceName = device.getName();
+                //String deviceHardwareAddress = device.getAddress(); // MAC address
+                //Log.d("JoinFragment","device: " + deviceName);
             }
         }
     };
@@ -81,7 +80,13 @@ public class MultiplayerJoinFragment extends Fragment implements IDevicesScanned
     }
 
     private void setUpRV() {
-        adapter = new DevicesScannedAdapter(getContext(),this,presenter.getDeviceList());
+        adapter = new DevicesScannedAdapter(getContext(), presenter.getDeviceList(), new DevicesScannedAdapter.Callback() {
+            @Override
+            public void onHostSelected(BluetoothDevice device) {
+                JoinServerThread joinServerThread = new JoinServerThread(device);
+                joinServerThread.start();
+            }
+        });
         rvJoinSelection.setAdapter(adapter);
         rvJoinSelection.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -96,7 +101,7 @@ public class MultiplayerJoinFragment extends Fragment implements IDevicesScanned
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (IMultiplayerListener) context;
+            listener = (IMultiplayerJoinListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() +
                     " must implement IMultiplayerHostMenu");
@@ -144,13 +149,7 @@ public class MultiplayerJoinFragment extends Fragment implements IDevicesScanned
         }
     }
 
-    @Override
-    public void onHostSelected(BluetoothDevice device) {
-        JoinServerThread joinServerThread = new JoinServerThread(device);
-        joinServerThread.start();
-    }
-
-    public interface IMultiplayerListener{
+    public interface IMultiplayerJoinListener {
         void onShowStartMenu();
     }
 

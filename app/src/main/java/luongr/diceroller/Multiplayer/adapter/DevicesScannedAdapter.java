@@ -22,12 +22,12 @@ public class DevicesScannedAdapter extends RecyclerView.Adapter<DevicesScannedAd
     //TODO: replace this with MultiplayerHost object
     List<BluetoothDevice> bluetoothDeviceList;
     Context context;
-    IDevicesScannedAdapter listener;
+    Callback callback;
 
-    public DevicesScannedAdapter(Context context,IDevicesScannedAdapter listener,List<BluetoothDevice> bluetoothDeviceList) {
+    public DevicesScannedAdapter(Context context,List<BluetoothDevice> bluetoothDeviceList, Callback callback) {
         this.context = context;
         this.bluetoothDeviceList = bluetoothDeviceList;
-        this.listener = listener;
+        this.callback = callback;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DevicesScannedAdapter extends RecyclerView.Adapter<DevicesScannedAd
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onHostSelected(bluetoothDeviceList.get(viewHolder.getAdapterPosition()));
+                callback.onHostSelected(bluetoothDeviceList.get(viewHolder.getAdapterPosition()));
             }
         });
         return viewHolder;
@@ -62,5 +62,9 @@ public class DevicesScannedAdapter extends RecyclerView.Adapter<DevicesScannedAd
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+
+    public interface Callback{
+        void onHostSelected(BluetoothDevice device);
     }
 }

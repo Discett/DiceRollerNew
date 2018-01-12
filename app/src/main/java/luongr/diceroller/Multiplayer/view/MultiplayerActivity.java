@@ -9,15 +9,18 @@ import android.widget.FrameLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import luongr.diceroller.Dialogs.Options.view.DialogOptions;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view.MultiplayerHostFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.view.MultiplayerJoinFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerStartFragment.view.MultiplayerStartFragment;
 import luongr.diceroller.R;
 
 public class MultiplayerActivity extends AppCompatActivity implements IMultiplayerActivity,
-        MultiplayerStartFragment.IMultiplayerStartMenu, MultiplayerJoinFragment.IMultiplayerListener{
+        MultiplayerStartFragment.IMultiplayerStartMenu, MultiplayerJoinFragment.IMultiplayerJoinListener,
+        MultiplayerHostFragment.IMultiplayerHostListener {
     @BindView(R.id.fragmentContainer)
     FrameLayout fragmentContainer;
+    DialogOptions dialogOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,9 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
         fragmentTransaction.replace(R.id.fragmentContainer,hostFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        dialogOptions = new DialogOptions();
+        dialogOptions.show(getSupportFragmentManager(),"options");
+        dialogOptions.setCancelable(false);
     }
 
     @Override
@@ -73,6 +79,7 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
 
     @Override
     public void onShowStartMenu() {
+        dialogOptions.dismiss();
         showStartMenu();
     }
 }
