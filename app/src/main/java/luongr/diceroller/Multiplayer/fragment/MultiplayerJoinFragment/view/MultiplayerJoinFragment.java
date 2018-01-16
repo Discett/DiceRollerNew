@@ -85,6 +85,7 @@ public class MultiplayerJoinFragment extends Fragment {
             public void onHostSelected(BluetoothDevice device) {
                 JoinServerThread joinServerThread = new JoinServerThread(device);
                 joinServerThread.start();
+                listener.onShowJoinRollMenu();
             }
         });
         rvJoinSelection.setAdapter(adapter);
@@ -151,6 +152,7 @@ public class MultiplayerJoinFragment extends Fragment {
 
     public interface IMultiplayerJoinListener {
         void onShowStartMenu();
+        void onShowJoinRollMenu();
     }
 
     @OnClick(R.id.btnScan)

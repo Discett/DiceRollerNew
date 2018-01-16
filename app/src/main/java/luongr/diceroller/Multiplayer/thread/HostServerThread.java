@@ -19,8 +19,7 @@ import static android.content.ContentValues.TAG;
 public class HostServerThread extends Thread {
     private final BluetoothServerSocket mmServerSocket;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
-    private final UUID MY_UUID = UUID.nameUUIDFromBytes(myDevice.getName().getBytes());
+    private final UUID MY_UUID = UUID.nameUUIDFromBytes(mBluetoothAdapter.getName().getBytes());
     private final String NAME = "DiceRoller";
 
     public HostServerThread() {
@@ -46,7 +45,7 @@ public class HostServerThread extends Thread {
                 Log.e(TAG, "Socket's accept() method failed", e);
                 break;
             }
-
+/* //We want multiple connections so we don't do this
             if (socket != null) {
                 // A connection was accepted. Perform work associated with
                 // the connection in a separate thread.
@@ -60,6 +59,7 @@ public class HostServerThread extends Thread {
                 }
                 break;
             }
+*/
         }
     }
 

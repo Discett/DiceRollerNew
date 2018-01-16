@@ -41,6 +41,7 @@ public class MultiplayerHostFragment extends Fragment {
 
     private static final int REQUEST_ENABLE_BT = 1;
     IMultiplayerHostListener listener;
+    HostServerThread hostServerThread;
 
 
 
@@ -127,24 +128,30 @@ public class MultiplayerHostFragment extends Fragment {
         btnStart.setVisibility(View.GONE);
         btnStop.setVisibility(View.VISIBLE);
         startDiscovery();
-        HostServerThread hostServerThread = new HostServerThread();
+        hostServerThread = new HostServerThread();
         hostServerThread.start();
         Log.d("HostFragment","Thread:" + hostServerThread.isAlive());
     }
 
     @OnClick(R.id.btnStop)
     public void onStopPressed(){
+        listener.onShowHostRollMenu();
+    }
+
+    private void cancelDiscovery() {
+        Log.d("MultiplayerHost","Cancel Discovery");
     }
 
 
     private void startDiscovery() {
         Log.d("MultiplayerHost","Start Discovery");
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,60);
         startActivityForResult(discoverableIntent,SCAN_MODE_CONNECTABLE_DISCOVERABLE);
     }
 
     public interface IMultiplayerHostListener {
         void onShowStartMenu();
+        void onShowHostRollMenu();
     }
 }

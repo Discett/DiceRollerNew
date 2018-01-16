@@ -16,4 +16,6 @@
     <string name="scan_start_host">Create Server</string>
     <string name="scan_stop_host">Everyone\'s in!</string>
     <string name="lock_selections">Lock Selections</string>
+    <string name="send">Send</string>
+    <string name="user_selections">Your current selections:</string>
 </resources>

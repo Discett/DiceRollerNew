@@ -11,7 +11,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import luongr.diceroller.Dialogs.Options.view.DialogOptions;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view.MultiplayerHostFragment;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view.MultiplayerHostRollFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.view.MultiplayerJoinFragment;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.view.MultiplayerJoinRollFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerStartFragment.view.MultiplayerStartFragment;
 import luongr.diceroller.R;
 
@@ -81,5 +83,25 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
     public void onShowStartMenu() {
         dialogOptions.dismiss();
         showStartMenu();
+    }
+
+    @Override
+    public void onShowJoinRollMenu() {
+        MultiplayerJoinRollFragment joinRollFragment = new MultiplayerJoinRollFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer,joinRollFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onShowHostRollMenu() {
+        MultiplayerHostRollFragment hostRollFragment = new MultiplayerHostRollFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer,hostRollFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
