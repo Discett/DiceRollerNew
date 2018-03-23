@@ -8,7 +8,11 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.UUID;
+
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view.MultiplayerHostFragment;
+import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
 
 import static android.content.ContentValues.TAG;
 
@@ -21,10 +25,14 @@ public class HostServerThread extends Thread {
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private final UUID MY_UUID = UUID.nameUUIDFromBytes(mBluetoothAdapter.getName().getBytes());
     private final String NAME = "DiceRoller";
+    private MultiplayerBluetoothService mpService;
+    private MultiplayerHostFragment multiplayerHostFragment;
 
-    public HostServerThread() {
+
+    public HostServerThread(MultiplayerHostFragment multiplayerHostFragment) {
         // Use a temporary object that is later assigned to mmServerSocket
         // because mmServerSocket is final.
+        this.multiplayerHostFragment = multiplayerHostFragment;
         BluetoothServerSocket tmp = null;
         try {
             // MY_UUID is the app's UUID string, also used by the client code.
@@ -45,12 +53,12 @@ public class HostServerThread extends Thread {
                 Log.e(TAG, "Socket's accept() method failed", e);
                 break;
             }
-/* //We want multiple connections so we don't do this
+ //We want multiple connections so we don't do this
             if (socket != null) {
                 // A connection was accepted. Perform work associated with
                 // the connection in a separate thread.
-
-                //manageMyConnectedSocket(socket);
+                Log.d("HostServerThread","Socket found");
+                manageMyConnectedSocket(socket);
 
                 try {
                     mmServerSocket.close();
@@ -59,8 +67,13 @@ public class HostServerThread extends Thread {
                 }
                 break;
             }
-*/
+
         }
+    }
+
+    private void manageMyConnectedSocket(BluetoothSocket socket) {
+        Log.d("JoinServerThread","ManagedConnectedSocket");
+        multiplayerHostFragment.setSocket(socket);
     }
 
     // Closes the connect socket and causes the thread to finish.

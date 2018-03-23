@@ -1,5 +1,6 @@
 package luongr.diceroller.Multiplayer.service;
 
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,21 @@ import java.io.OutputStream;
 public class MultiplayerBluetoothService {
     private static final String TAG = "MY_APP_DEBUG_TAG";
     private Handler mHandler; // handler that gets info from Bluetooth service
+    private BluetoothSocket socket;
+    private ConnectedThread connectedThread;
+
+    public MultiplayerBluetoothService(BluetoothSocket socket) {
+        this.socket = socket;
+        mHandler = new Handler();
+        connectedThread = new ConnectedThread(socket);
+        connectedThread.start();
+        Log.d("MPService","Constructor");
+    }
+
+    public void write(byte[] bytes) {
+        connectedThread.write(bytes);
+    }
+
 
     // Defines several constants used when transmitting messages between the
     // service and the UI.
@@ -70,6 +86,7 @@ public class MultiplayerBluetoothService {
                             MessageConstants.MESSAGE_READ, numBytes, -1,
                             mmBuffer);
                     readMsg.sendToTarget();
+                    Log.d("DataRead", readMsg.toString());
                 } catch (IOException e) {
                     Log.d(TAG, "Input stream was disconnected", e);
                     break;

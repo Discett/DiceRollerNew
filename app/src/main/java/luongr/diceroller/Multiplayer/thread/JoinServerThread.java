@@ -8,6 +8,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.UUID;
 
+import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.view.MultiplayerJoinFragment;
+import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
 import luongr.diceroller.R;
 
 import static android.content.ContentValues.TAG;
@@ -21,11 +23,14 @@ public class JoinServerThread extends Thread {
     private final BluetoothDevice mmDevice;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private UUID MY_UUID;
+    //private MultiplayerBluetoothService mpService;
+    private MultiplayerJoinFragment joinFragment;
 
-    public JoinServerThread(BluetoothDevice device) {
+    public JoinServerThread(BluetoothDevice device, MultiplayerJoinFragment joinFragment) {
         // Use a temporary object that is later assigned to mmSocket
         // because mmSocket is final.
         //TODO replace our UUID with a common one, probably bad form to do it our way
+        this.joinFragment = joinFragment;
         BluetoothSocket tmp = null;
         mmDevice = device;
         if(mmDevice.getName() != null){
@@ -65,8 +70,13 @@ public class JoinServerThread extends Thread {
 
         // The connection attempt succeeded. Perform work associated with
         // the connection in a separate thread.
+        manageMyConnectedSocket(mmSocket);
+    }
 
-        //manageMyConnectedSocket(mmSocket);
+    private void manageMyConnectedSocket(BluetoothSocket mmSocket) {
+        Log.d("JoinServerThread","ManagedConnectedSocket");
+        //mpService = new MultiplayerBluetoothService(mmSocket);
+        joinFragment.setSocket(mmSocket);
     }
 
     // Closes the client socket and causes the thread to finish.
@@ -77,5 +87,4 @@ public class JoinServerThread extends Thread {
             Log.e(TAG, "Could not close the client socket", e);
         }
     }
-
 }

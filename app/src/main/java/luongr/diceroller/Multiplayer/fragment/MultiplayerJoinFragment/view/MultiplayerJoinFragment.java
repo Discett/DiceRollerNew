@@ -3,6 +3,7 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.view;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -44,9 +45,11 @@ public class MultiplayerJoinFragment extends Fragment {
     @BindView(R.id.rvJoinSelection)
     RecyclerView rvJoinSelection;
 
+    MultiplayerJoinFragment multiplayerJoinFragment = this;
     IMultiplayerJoinListener listener;
     IMultiplayerJoinPresenter presenter;
     DevicesScannedAdapter adapter;
+    BluetoothSocket socket;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -83,9 +86,8 @@ public class MultiplayerJoinFragment extends Fragment {
         adapter = new DevicesScannedAdapter(getContext(), presenter.getDeviceList(), new DevicesScannedAdapter.Callback() {
             @Override
             public void onHostSelected(BluetoothDevice device) {
-                JoinServerThread joinServerThread = new JoinServerThread(device);
+                JoinServerThread joinServerThread = new JoinServerThread(device,multiplayerJoinFragment);
                 joinServerThread.start();
-                listener.onShowJoinRollMenu();
             }
         });
         rvJoinSelection.setAdapter(adapter);
@@ -150,9 +152,16 @@ public class MultiplayerJoinFragment extends Fragment {
         }
     }
 
+    public void setSocket(BluetoothSocket socket) {
+        this.socket = socket;
+        listener.onShowJoinRollMenu(socket);
+        //TODO: continue this train of thought
+        //socket is now here and since it's successful you change the views pass socket to view?
+    }
+
     public interface IMultiplayerJoinListener {
         void onShowStartMenu();
-        void onShowJoinRollMenu();
+        void onShowJoinRollMenu(BluetoothSocket socket);
     }
 
     @OnClick(R.id.btnScan)

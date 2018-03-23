@@ -1,8 +1,7 @@
 package luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,16 +19,12 @@ import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.view.MultiplayerJoinFragment;
 import luongr.diceroller.Multiplayer.thread.HostServerThread;
 import luongr.diceroller.R;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE;
-import static android.bluetooth.BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION;
 import static android.bluetooth.BluetoothAdapter.EXTRA_SCAN_MODE;
 import static android.bluetooth.BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE;
-import static android.bluetooth.BluetoothAdapter.SCAN_MODE_NONE;
 
 
 /**
@@ -38,6 +33,7 @@ import static android.bluetooth.BluetoothAdapter.SCAN_MODE_NONE;
 
 public class MultiplayerHostFragment extends Fragment {
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    BluetoothSocket socket = null;
 
     private static final int REQUEST_ENABLE_BT = 1;
     IMultiplayerHostListener listener;
@@ -128,14 +124,16 @@ public class MultiplayerHostFragment extends Fragment {
         btnStart.setVisibility(View.GONE);
         btnStop.setVisibility(View.VISIBLE);
         startDiscovery();
-        hostServerThread = new HostServerThread();
+        hostServerThread = new HostServerThread(this);
         hostServerThread.start();
         Log.d("HostFragment","Thread:" + hostServerThread.isAlive());
     }
 
     @OnClick(R.id.btnStop)
     public void onStopPressed(){
-        listener.onShowHostRollMenu();
+        if(socket != null){
+            listener.onShowHostRollMenu(socket);
+        }
     }
 
     private void cancelDiscovery() {
@@ -150,8 +148,12 @@ public class MultiplayerHostFragment extends Fragment {
         startActivityForResult(discoverableIntent,SCAN_MODE_CONNECTABLE_DISCOVERABLE);
     }
 
+    public void setSocket(BluetoothSocket socket) {
+        this.socket = socket;
+    }
+
     public interface IMultiplayerHostListener {
         void onShowStartMenu();
-        void onShowHostRollMenu();
+        void onShowHostRollMenu(BluetoothSocket socket);
     }
 }

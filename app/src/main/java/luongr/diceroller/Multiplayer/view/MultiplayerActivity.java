@@ -1,5 +1,6 @@
 package luongr.diceroller.Multiplayer.view;
 
+import android.bluetooth.BluetoothSocket;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -86,8 +87,9 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
     }
 
     @Override
-    public void onShowJoinRollMenu() {
+    public void onShowJoinRollMenu(BluetoothSocket socket) {
         MultiplayerJoinRollFragment joinRollFragment = new MultiplayerJoinRollFragment();
+        joinRollFragment.setSocket(socket);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer,joinRollFragment);
@@ -96,8 +98,9 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
     }
 
     @Override
-    public void onShowHostRollMenu() {
+    public void onShowHostRollMenu(BluetoothSocket socket) {
         MultiplayerHostRollFragment hostRollFragment = new MultiplayerHostRollFragment();
+        hostRollFragment.setSocket(socket);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer,hostRollFragment);
