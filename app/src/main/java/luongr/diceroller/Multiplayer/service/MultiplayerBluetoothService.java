@@ -21,9 +21,9 @@ public class MultiplayerBluetoothService {
     private BluetoothSocket socket;
     private ConnectedThread connectedThread;
 
-    public MultiplayerBluetoothService(BluetoothSocket socket) {
+    public MultiplayerBluetoothService(BluetoothSocket socket, Handler mHandler) {
         this.socket = socket;
-        mHandler = new Handler();
+        this.mHandler = mHandler;
         connectedThread = new ConnectedThread(socket);
         connectedThread.start();
         Log.d("MPService","Constructor");
@@ -36,7 +36,7 @@ public class MultiplayerBluetoothService {
 
     // Defines several constants used when transmitting messages between the
     // service and the UI.
-    private interface MessageConstants {
+    public interface MessageConstants {
         public static final int MESSAGE_READ = 0;
         public static final int MESSAGE_WRITE = 1;
         public static final int MESSAGE_TOAST = 2;
@@ -86,7 +86,9 @@ public class MultiplayerBluetoothService {
                             MessageConstants.MESSAGE_READ, numBytes, -1,
                             mmBuffer);
                     readMsg.sendToTarget();
+                    //String testMSG = new String(readMsg);
                     Log.d("DataRead", readMsg.toString());
+                    //TODO: find out how to get the read data
                 } catch (IOException e) {
                     Log.d(TAG, "Input stream was disconnected", e);
                     break;

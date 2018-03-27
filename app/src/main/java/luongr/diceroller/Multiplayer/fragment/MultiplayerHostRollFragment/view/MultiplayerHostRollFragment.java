@@ -2,6 +2,9 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,11 +52,28 @@ public class MultiplayerHostRollFragment extends Fragment {
         if(socket == null){
             Log.d("MultiplayerJoinRoll", "Null Socket");
         }
-        mpBluetoothService = new MultiplayerBluetoothService(socket);
+        mpBluetoothService = new MultiplayerBluetoothService(socket,mHandler);
+
         presenter = new MultiplayerHostRollFragmentPresenter(new MultiplayerHostRollFragmentInteractor());
         setUpRV();
         return view;
     }
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            switch(msg.what){
+                case MultiplayerBluetoothService.MessageConstants.MESSAGE_WRITE:
+                    break;
+                case MultiplayerBluetoothService.MessageConstants.MESSAGE_READ:
+                    byte[] readBuffer = (byte[]) msg.obj;
+                    //set up readMessage like this so we get the appropriate size for string via arg1
+                    String readMessage = new String(readBuffer, 0, msg.arg1);
+                    Log.d("HostReadMessage",readMessage);
+                    break;
+            }
+        }
+    };
 
     @OnClick(R.id.btnAddSelection)
     public void addSelection(){

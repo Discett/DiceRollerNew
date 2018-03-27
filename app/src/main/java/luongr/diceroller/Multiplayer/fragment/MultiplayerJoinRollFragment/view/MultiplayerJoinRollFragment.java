@@ -2,6 +2,8 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.view;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -40,14 +42,22 @@ public class MultiplayerJoinRollFragment extends Fragment {
         if(socket == null){
             Log.d("MultiplayerJoinRoll", "Null Socket");
         }
-        mpBluetoothService = new MultiplayerBluetoothService(socket);
+        mpBluetoothService = new MultiplayerBluetoothService(socket, mHandler);
         ButterKnife.bind(this,view);
         return view;
     }
 
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+
+        }
+    };
+
     @OnClick(R.id.btnSendSelections)
     public void onSendSelection(){
         String test = "hello";
+        Log.d("BtnSendSelections",test.getBytes().toString());
         mpBluetoothService.write(test.getBytes());
     }
 
