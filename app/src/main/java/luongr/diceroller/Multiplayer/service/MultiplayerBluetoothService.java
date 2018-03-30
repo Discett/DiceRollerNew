@@ -40,6 +40,7 @@ public class MultiplayerBluetoothService {
         public static final int MESSAGE_READ = 0;
         public static final int MESSAGE_WRITE = 1;
         public static final int MESSAGE_TOAST = 2;
+        public static final String DICE_NUMBER_OF_SELECTION = "d:";
 
         // ... (Add other message types here as needed.)
     }
@@ -86,9 +87,7 @@ public class MultiplayerBluetoothService {
                             MessageConstants.MESSAGE_READ, numBytes, -1,
                             mmBuffer);
                     readMsg.sendToTarget();
-                    //String testMSG = new String(readMsg);
-                    Log.d("DataRead", readMsg.toString());
-                    //TODO: find out how to get the read data
+                    //Log.d("DataRead", readMsg.toString());
                 } catch (IOException e) {
                     Log.d(TAG, "Input stream was disconnected", e);
                     break;

@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
+import luongr.diceroller.Dice;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.model.MultiplayerHostRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.IMultiplayerHostRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.MultiplayerHostRollFragmentPresenter;
@@ -40,6 +41,7 @@ public class MultiplayerHostRollFragment extends Fragment {
     EditText edtSelection;
 
     MultiplayerBluetoothService mpBluetoothService;
+    Dice dice;
     BluetoothSocket socket = null;
     IMultiplayerHostRollFragmentPresenter presenter;
     //TODO: limit this fragment to number of available user inputs
@@ -53,10 +55,23 @@ public class MultiplayerHostRollFragment extends Fragment {
             Log.d("MultiplayerJoinRoll", "Null Socket");
         }
         mpBluetoothService = new MultiplayerBluetoothService(socket,mHandler);
-
         presenter = new MultiplayerHostRollFragmentPresenter(new MultiplayerHostRollFragmentInteractor());
-        setUpRV();
+        dice = Dice.getInstance();
+        //sends dice information
+        Log.d("MultiplayerJoinRoll", "Send Dice Info");
+        mpBluetoothService.write(diceInfo());
         return view;
+    }
+
+    private byte[] diceInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(MultiplayerBluetoothService.MessageConstants.DICE_NUMBER_OF_SELECTION);
+        sb.append(dice.getDiceSides());
+        sb.append(':');
+        sb.append(dice.getDiceSidesRange());
+        sb.append(':');
+        sb.append(dice.getNumberOfSelections());
+        return sb.toString().getBytes();
     }
 
     Handler mHandler = new Handler(){
@@ -70,6 +85,8 @@ public class MultiplayerHostRollFragment extends Fragment {
                     //set up readMessage like this so we get the appropriate size for string via arg1
                     String readMessage = new String(readBuffer, 0, msg.arg1);
                     Log.d("HostReadMessage",readMessage);
+                    Log.d("HostReadMessage",String.valueOf(msg.arg1));
+                    Log.d("HostReadMessage",String.valueOf(msg.arg2));
                     break;
             }
         }

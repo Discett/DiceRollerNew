@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/user_selections"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvUserSelections"
