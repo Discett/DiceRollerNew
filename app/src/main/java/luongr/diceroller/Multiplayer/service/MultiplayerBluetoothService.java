@@ -41,6 +41,8 @@ public class MultiplayerBluetoothService {
         public static final int MESSAGE_WRITE = 1;
         public static final int MESSAGE_TOAST = 2;
         public static final String DICE_NUMBER_OF_SELECTION = "d:";
+        public static final String DICE_NUMBER_OF_SELECTION_CHECK = "d";
+
 
         // ... (Add other message types here as needed.)
     }
