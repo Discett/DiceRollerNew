@@ -3,8 +3,11 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.model
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import luongr.diceroller.Dice;
 import luongr.diceroller.R;
+import luongr.diceroller.Selection;
 
 import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.DICE_NUMBER_OF_SELECTION_CHECK;
 
@@ -15,6 +18,8 @@ import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.
 public class MultiplayerJoinRollFragmentInteractor {
     Dice dice = Dice.getInstance();
     Context context;
+    private ArrayList<Selection> ListOfSelection = new ArrayList<>();
+
     public MultiplayerJoinRollFragmentInteractor(Context context) {
         this.context = context;
     }
@@ -43,7 +48,6 @@ public class MultiplayerJoinRollFragmentInteractor {
                     sb.append(context.getResources().getString(R.string.current_number_of_selections,diceNumberOfSelections));
                 }
                 Log.d("MultiplayerInteractor", sb.toString());
-                //TODO: Put a loading screen on join to wait for host to confirm
                 //Needs to unlock the loading screen and also prevent people form submitting suggestions too early
                 callback.onDisplayInfo(sb.toString());
             } else {
@@ -53,7 +57,28 @@ public class MultiplayerJoinRollFragmentInteractor {
         }
     }
 
+    public void addSelectionToList(String selection) {
+        if(!selection.isEmpty()){
+            Log.d("Interactor","adding to list");
+            ListOfSelection.add(new Selection(selection));
+        }
+    }
+
+    public ArrayList<Selection> getListOfSelection() {
+        return ListOfSelection;
+    }
+
+    public void checkMaxSelections(Callback callback) {
+        if(getListOfSelection().size() < dice.getMaxNumberOfSelections()){
+            callback.onShowSelection();
+        } else {
+            callback.onHideSelection();
+        }
+    }
+
     public interface Callback{
         void onDisplayInfo(String info);
+        void onHideSelection();
+        void onShowSelection();
     }
 }

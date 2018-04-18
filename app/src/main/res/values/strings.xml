@@ -7,7 +7,7 @@
     <string name="action_settings">action_settings</string>
     <string name="current_dice_selected">Current Dice Selection: %1$d</string>
     <string name="current_dice_range_selected">Current Dice Range: %1$d - %2$d</string>
-    <string name="current_number_of_selections">Max Selections: %1$d</string>
+    <string name="current_number_of_selections">Max Input Selections: %1$d</string>
     <string name="item_list_host">%1$d. %2$s</string>
     <string name="error_invalid">Invalid: %1$s</string>
     <string name="set_custom_range">Set custom dice range</string>
@@ -18,4 +18,5 @@
     <string name="lock_selections">Lock Selections</string>
     <string name="send">Send</string>
     <string name="user_selections">Your current selections:</string>
+    <string name="waiting_for_host">Waiting for Host</string>
 </resources>

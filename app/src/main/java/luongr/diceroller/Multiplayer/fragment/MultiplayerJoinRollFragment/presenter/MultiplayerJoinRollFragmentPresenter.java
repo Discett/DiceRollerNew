@@ -1,9 +1,10 @@
 package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.presenter;
 
-import android.content.Context;
+import java.util.ArrayList;
 
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.model.MultiplayerJoinRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.view.MultiplayerJoinRollFragment;
+import luongr.diceroller.Selection;
 
 /**
  * Created by Luong on 3/30/2018.
@@ -22,6 +23,44 @@ public class MultiplayerJoinRollFragmentPresenter {
             @Override
             public void onDisplayInfo(String info) {
                 view.joinRollDisplayInfo(info);
+                view.hideLoadingDialog();
+            }
+
+            @Override
+            public void onHideSelection() {
+                //do nothing
+            }
+
+            @Override
+            public void onShowSelection() {
+                //do nothing
+            }
+        });
+    }
+
+    public ArrayList<Selection> getListOfSelection() {
+        return interactor.getListOfSelection();
+    }
+
+    public void addSelectionToList(String selection) {
+        interactor.addSelectionToList(selection);
+    }
+
+    public void checkMaxSelections() {
+        interactor.checkMaxSelections(new MultiplayerJoinRollFragmentInteractor.Callback() {
+            @Override
+            public void onDisplayInfo(String info) {
+                //do nothing
+            }
+
+            @Override
+            public void onHideSelection() {
+                view.hideEdtSelection();
+            }
+
+            @Override
+            public void onShowSelection() {
+                view.showEdtSelection();
             }
         });
     }
