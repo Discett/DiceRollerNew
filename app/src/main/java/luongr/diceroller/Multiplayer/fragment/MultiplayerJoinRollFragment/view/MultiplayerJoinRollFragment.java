@@ -47,7 +47,6 @@ public class MultiplayerJoinRollFragment extends Fragment {
     DialogFragment loading;
     MultiplayerBluetoothService mpBluetoothService;
     MultiplayerJoinRollFragmentPresenter presenter;
-    Context context;
     SelectionAdapter adapter;
 
     @Nullable
@@ -77,14 +76,14 @@ public class MultiplayerJoinRollFragment extends Fragment {
     }
 
     private void setUpFragment() {
-        adapter = new SelectionAdapter(context, presenter.getListOfSelection(), new SelectionAdapter.Callback() {
+        adapter = new SelectionAdapter(getContext(), presenter.getListOfSelection(), new SelectionAdapter.Callback() {
             @Override
             public void onRemoved() {
-                //TODO: set up the removal of a selection
+                //TODO: set up the removal of a selection and update ui
             }
         });
         rvSelections.setAdapter(adapter);
-        rvSelections.setLayoutManager(new LinearLayoutManager(context));
+        rvSelections.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void hideLoadingDialog() {
@@ -115,12 +114,15 @@ public class MultiplayerJoinRollFragment extends Fragment {
     public void onAddSelection(){
         Log.d("btnAddSelection","adding");
         presenter.addSelectionToList(edtSelection.getText().toString());
-        //TODO: update this somehow
+        synchronized(adapter){
+            adapter.notifyDataSetChanged();
+        }
+        presenter.checkMaxSelections();
     }
 
     @OnClick(R.id.btnSendSelections)
     public void onSendSelection(){
-
+        //TODO: setup the confirmation before sending
     }
 
     public void setSocket(BluetoothSocket socket){
@@ -128,7 +130,6 @@ public class MultiplayerJoinRollFragment extends Fragment {
     }
 
     public void joinRollDisplayInfo(String info) {
-        //TODO: needs to update the UI when this is called
         txtUserSelectionHeader.setText(info);
     }
 }

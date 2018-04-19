@@ -69,7 +69,9 @@ public class MultiplayerJoinRollFragmentInteractor {
     }
 
     public void checkMaxSelections(Callback callback) {
-        if(getListOfSelection().size() < dice.getMaxNumberOfSelections()){
+        Log.d("CheckMaxSelections", String.valueOf(ListOfSelection.size()));
+        Log.d("CheckMaxSelections", String.valueOf(dice.getMaxNumberOfSelections()));
+        if(ListOfSelection.size() < dice.getNumberOfSelections()){
             callback.onShowSelection();
         } else {
             callback.onHideSelection();
