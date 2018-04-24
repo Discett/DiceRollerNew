@@ -12,4 +12,6 @@ public interface IMultiplayerHostRollFragmentPresenter {
     List<Selection> getSelectionList();
 
     void addSelection(String s);
+
+    void parseMessageList(String s);
 }

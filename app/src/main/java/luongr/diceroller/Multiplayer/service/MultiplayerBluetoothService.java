@@ -42,6 +42,7 @@ public class MultiplayerBluetoothService {
         public static final int MESSAGE_TOAST = 2;
         public static final String DICE_NUMBER_OF_SELECTION = "d:";
         public static final String DICE_NUMBER_OF_SELECTION_CHECK = "d";
+        public static final String DICE_SELECTION_DELIMITER = "//";
 
 
         // ... (Add other message types here as needed.)
@@ -83,8 +84,12 @@ public class MultiplayerBluetoothService {
             while (true) {
                 try {
                     // Read from the InputStream.
+                    //.read puts the read message into mmBuffer
                     numBytes = mmInStream.read(mmBuffer);
                     // Send the obtained bytes to the UI activity.
+                    //send message to handler, what is defined by your own metric, numbytes is required
+                    //to make the string with appropriate size
+                    //send the mmbuffer which is the message
                     Message readMsg = mHandler.obtainMessage(
                             MessageConstants.MESSAGE_READ, numBytes, -1,
                             mmBuffer);

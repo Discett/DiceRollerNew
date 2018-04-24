@@ -64,4 +64,8 @@ public class MultiplayerJoinRollFragmentPresenter {
             }
         });
     }
+
+    public byte[] getByteArray() {
+        return interactor.getByteArray();
+    }
 }

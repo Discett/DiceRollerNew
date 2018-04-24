@@ -24,4 +24,9 @@ public class MultiplayerHostRollFragmentPresenter implements IMultiplayerHostRol
     public void addSelection(String s) {
         interactor.addSelection(s);
     }
+
+    @Override
+    public void parseMessageList(String s) {
+        interactor.parseMessageList(s);
+    }
 }

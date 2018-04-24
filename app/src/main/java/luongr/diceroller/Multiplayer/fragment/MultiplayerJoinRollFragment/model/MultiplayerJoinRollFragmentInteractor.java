@@ -4,12 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import luongr.diceroller.Dice;
 import luongr.diceroller.R;
 import luongr.diceroller.Selection;
 
 import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.DICE_NUMBER_OF_SELECTION_CHECK;
+import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.DICE_SELECTION_DELIMITER;
 
 /**
  * Created by Luong on 3/30/2018.
@@ -76,6 +78,18 @@ public class MultiplayerJoinRollFragmentInteractor {
         } else {
             callback.onHideSelection();
         }
+    }
+
+    public byte[] getByteArray() {
+        StringBuilder sb = new StringBuilder();
+        //loop through your selections and convert the string into one string seperated by a delimiter
+        //then convert that string into a byte array
+        //sanitize the string if string has a delimiter put in already
+        for(int i = 0; i < ListOfSelection.size(); i++){
+            sb.append(ListOfSelection.get(i).getName());
+            sb.append(DICE_SELECTION_DELIMITER);
+        }
+        return sb.toString().getBytes();
     }
 
     public interface Callback{

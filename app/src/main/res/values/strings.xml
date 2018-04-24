@@ -19,4 +19,6 @@
     <string name="send">Send</string>
     <string name="user_selections">Your current selections:</string>
     <string name="waiting_for_host">Waiting for Host</string>
+    <string name="dont_send">Don\'t Send</string>
+    <string name="confirm_send_message">You can only send your list once, are you sure you want to send your list?</string>
 </resources>

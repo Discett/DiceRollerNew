@@ -81,12 +81,15 @@ public class MultiplayerHostRollFragment extends Fragment {
                 case MultiplayerBluetoothService.MessageConstants.MESSAGE_WRITE:
                     break;
                 case MultiplayerBluetoothService.MessageConstants.MESSAGE_READ:
+                    //when handler reads the 0 which is defined by your constant read the object buffer
                     byte[] readBuffer = (byte[]) msg.obj;
+                    //now we can convert the byte to string
                     //set up readMessage like this so we get the appropriate size for string via arg1
                     String readMessage = new String(readBuffer, 0, msg.arg1);
-                    Log.d("HostReadMessage",readMessage);
-                    Log.d("HostReadMessage",String.valueOf(msg.arg1));
-                    Log.d("HostReadMessage",String.valueOf(msg.arg2));
+                    presenter.parseMessageList(readMessage);
+                    //Log.d("HostReadMessage",readMessage);
+                    //Log.d("HostReadMessage",String.valueOf(msg.arg1));
+                    //Log.d("HostReadMessage",String.valueOf(msg.arg2));
                     break;
             }
         }

@@ -1,7 +1,6 @@
 package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.view;
 
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
+import luongr.diceroller.Dialogs.Confirmation.view.DialogConfirmation;
 import luongr.diceroller.Dialogs.Loading.view.DialogLoading;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.model.MultiplayerJoinRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.presenter.MultiplayerJoinRollFragmentPresenter;
@@ -33,7 +33,7 @@ import luongr.diceroller.R;
  * Created by Luong Randy on 1/16/2018.
  */
 
-public class MultiplayerJoinRollFragment extends Fragment {
+public class MultiplayerJoinRollFragment extends Fragment implements DialogConfirmation.IDialogConfirmation{
 
     @BindView(R.id.rvUserSelections)
     RecyclerView rvSelections;
@@ -79,7 +79,7 @@ public class MultiplayerJoinRollFragment extends Fragment {
         adapter = new SelectionAdapter(getContext(), presenter.getListOfSelection(), new SelectionAdapter.Callback() {
             @Override
             public void onRemoved() {
-                //TODO: set up the removal of a selection and update ui
+                presenter.checkMaxSelections();
             }
         });
         rvSelections.setAdapter(adapter);
@@ -123,6 +123,14 @@ public class MultiplayerJoinRollFragment extends Fragment {
     @OnClick(R.id.btnSendSelections)
     public void onSendSelection(){
         //TODO: setup the confirmation before sending
+        DialogConfirmation confirmation = new DialogConfirmation();
+        confirmation.show(getFragmentManager(),"confirmation");
+        confirmation.setCancelable(false);
+        //confirmation.setMessage(getContext().getResources().getString(R.string.confirm_send_message));
+        //confirmation.setMessageBtn1(getContext().getResources().getString(R.string.send));
+        //confirmation.setMessageBtn2(getContext().getResources().getString(R.string.dont_send));
+        //Log.d("sendList: ",presenter.getByteArray().toString());
+        //mpBluetoothService.write(presenter.getByteArray());
     }
 
     public void setSocket(BluetoothSocket socket){
@@ -131,5 +139,16 @@ public class MultiplayerJoinRollFragment extends Fragment {
 
     public void joinRollDisplayInfo(String info) {
         txtUserSelectionHeader.setText(info);
+    }
+
+
+    @Override
+    public void onBtn1(DialogFragment dialog) {
+        Log.d("joinroll","onbtn1");
+    }
+
+    @Override
+    public void onBtn2(DialogFragment dialog) {
+        Log.d("joinroll","onbtn2");
     }
 }
