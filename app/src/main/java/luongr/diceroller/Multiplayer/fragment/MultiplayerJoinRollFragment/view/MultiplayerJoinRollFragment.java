@@ -122,13 +122,12 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
 
     @OnClick(R.id.btnSendSelections)
     public void onSendSelection(){
-        //TODO: setup the confirmation before sending
-        DialogConfirmation confirmation = new DialogConfirmation();
-        confirmation.show(getFragmentManager(),"confirmation");
-        confirmation.setCancelable(false);
-        //confirmation.setMessage(getContext().getResources().getString(R.string.confirm_send_message));
-        //confirmation.setMessageBtn1(getContext().getResources().getString(R.string.send));
-        //confirmation.setMessageBtn2(getContext().getResources().getString(R.string.dont_send));
+        DialogConfirmation confirmation = DialogConfirmation.dialogInstance(
+                getResources().getString(R.string.confirm_send_message),
+                getResources().getString(R.string.send),
+                getResources().getString(R.string.dont_send));
+        confirmation.show(getFragmentManager(),getResources().getString(R.string.confirm_send_message));
+
         //Log.d("sendList: ",presenter.getByteArray().toString());
         //mpBluetoothService.write(presenter.getByteArray());
     }
@@ -145,10 +144,12 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     @Override
     public void onBtn1(DialogFragment dialog) {
         Log.d("joinroll","onbtn1");
+
     }
 
     @Override
     public void onBtn2(DialogFragment dialog) {
         Log.d("joinroll","onbtn2");
+        dialog.dismiss();
     }
 }
