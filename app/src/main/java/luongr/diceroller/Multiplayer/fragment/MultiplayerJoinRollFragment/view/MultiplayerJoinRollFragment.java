@@ -126,7 +126,7 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
                 getResources().getString(R.string.confirm_send_message),
                 getResources().getString(R.string.send),
                 getResources().getString(R.string.dont_send));
-        confirmation.show(getFragmentManager(),getResources().getString(R.string.confirm_send_message));
+        confirmation.show(getFragmentManager(),getResources().getString(R.string.dialog_confirm));
 
         //Log.d("sendList: ",presenter.getByteArray().toString());
         //mpBluetoothService.write(presenter.getByteArray());
@@ -144,7 +144,8 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     @Override
     public void onBtn1(DialogFragment dialog) {
         Log.d("joinroll","onbtn1");
-
+        mpBluetoothService.write(presenter.getByteArray());
+        //TODO: send to wait for result screen.
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,9 +64,13 @@ public class DialogConfirmation extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        //TODO: This only works if fragment container is named fragmentContainer
+        Fragment activity = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+
         try {
             // Instantiate the IDialogConfirmation so we can send events to the host
-            listener = (IDialogConfirmation) context;
+            listener = (IDialogConfirmation) activity;
+            Log.d("activty",activity.toString());
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString()
@@ -94,7 +99,12 @@ public class DialogConfirmation extends DialogFragment {
 
     @OnClick(R.id.btn2)
     public void onBtn2click(){
-
+        if(listener != null){
+            listener.onBtn2(this);
+            Log.d("listener", "is not null");
+        } else {
+            Log.d("listener", "is null");
+        }
     }
 
     public interface IDialogConfirmation{
