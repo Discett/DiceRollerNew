@@ -13,14 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
-import luongr.diceroller.Dice;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.model.MultiplayerHostRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.IMultiplayerHostRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.MultiplayerHostRollFragmentPresenter;
@@ -33,45 +34,37 @@ import luongr.diceroller.R;
 
 public class MultiplayerHostRollFragment extends Fragment {
 
-    @BindView(R.id.btnLockSelection)
-    ToggleButton btnLockSelection;
-    @BindView(R.id.rvSelection)
+    @BindView(R.id.rvUserSelections)
     RecyclerView rvSelection;
     @BindView(R.id.edtSelection)
     EditText edtSelection;
+    @BindView(R.id.btnAddSelection)
+    Button btnAddSelection;
+    @BindView(R.id.txtUserSelectionHeader)
+    TextView txtUserSelectionHeader;
 
     MultiplayerBluetoothService mpBluetoothService;
-    Dice dice;
     BluetoothSocket socket = null;
     IMultiplayerHostRollFragmentPresenter presenter;
-    //TODO: limit this fragment to number of available user inputs
+    SelectionAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mutliplayer_host_roll,container,false);
+        View view = inflater.inflate(R.layout.fragment_multiplayer_join_roll,container,false);
         ButterKnife.bind(this,view);
         if(socket == null){
             Log.d("MultiplayerJoinRoll", "Null Socket");
         }
         mpBluetoothService = new MultiplayerBluetoothService(socket,mHandler);
-        presenter = new MultiplayerHostRollFragmentPresenter(new MultiplayerHostRollFragmentInteractor());
-        dice = Dice.getInstance();
-        //sends dice information
+        presenter = new MultiplayerHostRollFragmentPresenter(this,new MultiplayerHostRollFragmentInteractor(getContext()));
+        presenter.checkMaxSelections();
+        setUpRV();
+        txtUserSelectionHeader.setText(presenter.getDiceInfoHeader());
+        //sends dice information to all connected devices and releases them from the loading screen.
         Log.d("MultiplayerJoinRoll", "Send Dice Info");
-        mpBluetoothService.write(diceInfo());
+        mpBluetoothService.write(presenter.diceInfo());
         return view;
-    }
-
-    private byte[] diceInfo() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(MultiplayerBluetoothService.MessageConstants.DICE_NUMBER_OF_SELECTION);
-        sb.append(dice.getDiceSides());
-        sb.append(':');
-        sb.append(dice.getDiceSidesRange());
-        sb.append(':');
-        sb.append(dice.getNumberOfSelections());
-        return sb.toString().getBytes();
     }
 
     Handler mHandler = new Handler(){
@@ -98,25 +91,42 @@ public class MultiplayerHostRollFragment extends Fragment {
     @OnClick(R.id.btnAddSelection)
     public void addSelection(){
         presenter.addSelection(edtSelection.getText().toString());
+        synchronized(adapter){
+            adapter.notifyDataSetChanged();
+        }
+        adapter.notifyDataSetChanged();
+        presenter.checkMaxSelections();
     }
 
     private void setUpRV() {
-        SelectionAdapter adapter = new SelectionAdapter(getContext(), presenter.getSelectionList(), new SelectionAdapter.Callback() {
+         adapter = new SelectionAdapter(getContext(), presenter.getSelectionList(), new SelectionAdapter.Callback() {
             @Override
             public void onRemoved() {
                 //might need to run a check to see the number of available selections
+                presenter.checkMaxSelections();
+
             }
         });
         rvSelection.setAdapter(adapter);
         rvSelection.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+    @OnClick(R.id.btnConfirmSelections)
+    public void onConfirm(){
+        //TODO: confirm dialog to new roll screen.
+    }
+
     public void setSocket(BluetoothSocket socket) {
         this.socket = socket;
     }
 
-    @OnClick(R.id.btnLockSelection)
-    public void onLockToggle(){
+    public void hideAddSelection() {
+        btnAddSelection.setVisibility(View.INVISIBLE);
+        edtSelection.setVisibility(View.INVISIBLE);
+    }
 
+    public void showAddSelection() {
+        btnAddSelection.setVisibility(View.VISIBLE);
+        edtSelection.setVisibility(View.VISIBLE);
     }
 }

@@ -14,4 +14,10 @@ public interface IMultiplayerHostRollFragmentPresenter {
     void addSelection(String s);
 
     void parseMessageList(String s);
+
+    void checkMaxSelections();
+
+    byte[] diceInfo();
+
+    String getDiceInfoHeader();
 }

@@ -2,7 +2,9 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.prese
 
 import java.util.List;
 
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view.MultiplayerHostFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.model.MultiplayerHostRollFragmentInteractor;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view.MultiplayerHostRollFragment;
 import luongr.diceroller.Selection;
 
 /**
@@ -11,8 +13,10 @@ import luongr.diceroller.Selection;
 
 public class MultiplayerHostRollFragmentPresenter implements IMultiplayerHostRollFragmentPresenter {
     MultiplayerHostRollFragmentInteractor interactor;
-    public MultiplayerHostRollFragmentPresenter(MultiplayerHostRollFragmentInteractor interactor) {
+    MultiplayerHostRollFragment view;
+    public MultiplayerHostRollFragmentPresenter(MultiplayerHostRollFragment view, MultiplayerHostRollFragmentInteractor interactor) {
         this.interactor = interactor;
+        this.view = view;
     }
 
     @Override
@@ -28,5 +32,30 @@ public class MultiplayerHostRollFragmentPresenter implements IMultiplayerHostRol
     @Override
     public void parseMessageList(String s) {
         interactor.parseMessageList(s);
+    }
+
+    @Override
+    public void checkMaxSelections() {
+        interactor.checkMaxSelections(new MultiplayerHostRollFragmentInteractor.Callback() {
+            @Override
+            public void onShowAddSelection() {
+                view.showAddSelection();
+            }
+
+            @Override
+            public void onHideAddSelection() {
+                view.hideAddSelection();
+            }
+        });
+    }
+
+    @Override
+    public byte[] diceInfo() {
+        return interactor.diceInfo();
+    }
+
+    @Override
+    public String getDiceInfoHeader() {
+        return interactor.getDiceInfoHeader();
     }
 }

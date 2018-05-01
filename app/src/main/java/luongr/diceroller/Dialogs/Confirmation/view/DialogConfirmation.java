@@ -21,15 +21,12 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import luongr.diceroller.Dialogs.Confirmation.model.DialogConfirmationInteractor;
-import luongr.diceroller.Dialogs.Confirmation.presenter.DialogConfirmationPresenter;
-import luongr.diceroller.Dialogs.Confirmation.presenter.IDialogConfirmationPresenter;
+
 import luongr.diceroller.R;
 
 /**
  * Created by Luong Randy on 1/18/2018.
  */
-//TODO: finish up the dynamic confirmation
 public class DialogConfirmation extends DialogFragment {
     @BindView(R.id.txtConfirmationMessage)
     TextView txtConfirmationMesage;
@@ -60,11 +57,12 @@ public class DialogConfirmation extends DialogFragment {
         btn2.setText(getArguments().getString("btn2"));
         return view;
     }
-//TODO: fix on attach
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         //TODO: This only works if fragment container is named fragmentContainer
+        //take the activity and get whatever fragment is loaded into the fragmentContainer
         Fragment activity = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
 
         try {

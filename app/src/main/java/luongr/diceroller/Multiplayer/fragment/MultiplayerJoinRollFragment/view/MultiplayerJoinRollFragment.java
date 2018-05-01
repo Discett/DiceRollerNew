@@ -120,7 +120,7 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
         presenter.checkMaxSelections();
     }
 
-    @OnClick(R.id.btnSendSelections)
+    @OnClick(R.id.btnConfirmSelections)
     public void onSendSelection(){
         DialogConfirmation confirmation = DialogConfirmation.dialogInstance(
                 getResources().getString(R.string.confirm_send_message),
@@ -145,6 +145,7 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     public void onBtn1(DialogFragment dialog) {
         Log.d("joinroll","onbtn1");
         mpBluetoothService.write(presenter.getByteArray());
+        dialog.dismiss();
         //TODO: send to wait for result screen.
     }
 

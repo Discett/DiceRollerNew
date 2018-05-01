@@ -133,6 +133,9 @@ public class MultiplayerHostFragment extends Fragment {
     public void onStopPressed(){
         if(socket != null){
             listener.onShowHostRollMenu(socket);
+            Log.d("socket","is not null");
+        } else {
+            Log.d("socket","is null");
         }
     }
 
