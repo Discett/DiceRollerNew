@@ -21,7 +21,9 @@
     <string name="waiting_for_host">Waiting for Host</string>
     <string name="dont_send">Don\'t Send</string>
     <string name="confirm_send_message">You can only send your list once, are you sure you want to send your list?</string>
+    <string name="confirm_host_message">Are you content with your list?</string>
     <string name="dialog_confirm">dialog_confirm</string>
     <string name="dialog_cancel">dialog_cancel</string>
     <string name="confirm">confirm</string>
+    <string name="deny">deny</string>
 </resources>

@@ -144,14 +144,18 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     @Override
     public void onBtn1(DialogFragment dialog) {
         Log.d("joinroll","onbtn1");
-        mpBluetoothService.write(presenter.getByteArray());
+        //TODO: send to wait for result screen and wait for host's response. Then send array over.
         dialog.dismiss();
-        //TODO: send to wait for result screen.
+        showLoadingDialog();
     }
 
     @Override
     public void onBtn2(DialogFragment dialog) {
         Log.d("joinroll","onbtn2");
         dialog.dismiss();
+    }
+
+    public void onWriteToHost() {
+        mpBluetoothService.write(presenter.getByteArray());
     }
 }

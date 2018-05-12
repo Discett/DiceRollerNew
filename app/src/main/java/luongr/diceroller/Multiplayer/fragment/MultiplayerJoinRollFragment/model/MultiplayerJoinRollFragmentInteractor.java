@@ -12,6 +12,7 @@ import luongr.diceroller.Selection;
 
 import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.DICE_NUMBER_OF_SELECTION_CHECK;
 import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.DICE_SELECTION_DELIMITER;
+import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.HOST_READY_CHECK;
 
 /**
  * Created by Luong on 3/30/2018.
@@ -32,29 +33,34 @@ public class MultiplayerJoinRollFragmentInteractor {
             //Parse the string if d is before split then we know it's dice data
             String[] parse = readMessage.split(":");
             String check = parse[0];
-            if(check.equals(DICE_NUMBER_OF_SELECTION_CHECK)){
-                //continue with dice data
-                int dicex     = Integer.valueOf(parse[1]);
-                int dicey     = Integer.valueOf(parse[2]);
-                int diceNumberOfSelections = Integer.valueOf(parse[3]);
-                dice.setDiceRange(dicex,dicey);
-                dice.setNumberOfSelections(diceNumberOfSelections);
-                StringBuilder sb = new StringBuilder();
-                if(dicex == dicey){
-                    sb.append(context.getResources().getString(R.string.current_dice_selected,dicex));
-                    sb.append(" with ");
-                    sb.append(context.getResources().getString(R.string.current_number_of_selections,diceNumberOfSelections));
-                } else {
-                    sb.append(context.getResources().getString(R.string.current_dice_range_selected,dicex,dicey));
-                    sb.append(" with ");
-                    sb.append(context.getResources().getString(R.string.current_number_of_selections,diceNumberOfSelections));
-                }
-                Log.d("MultiplayerInteractor", sb.toString());
-                //Needs to unlock the loading screen and also prevent people form submitting suggestions too early
-                callback.onDisplayInfo(sb.toString());
-            } else {
-                //this is other information
-                Log.d("MultiplayerInteractor", "not dice data");
+            switch(check){
+                case DICE_NUMBER_OF_SELECTION_CHECK:
+                    int dicex     = Integer.valueOf(parse[1]);
+                    int dicey     = Integer.valueOf(parse[2]);
+                    int diceNumberOfSelections = Integer.valueOf(parse[3]);
+                    dice.setDiceRange(dicex,dicey);
+                    dice.setNumberOfSelections(diceNumberOfSelections);
+                    StringBuilder sb = new StringBuilder();
+                    if(dicex == dicey){
+                        sb.append(context.getResources().getString(R.string.current_dice_selected,dicex));
+                        sb.append(" with ");
+                        sb.append(context.getResources().getString(R.string.current_number_of_selections,diceNumberOfSelections));
+                    } else {
+                        sb.append(context.getResources().getString(R.string.current_dice_range_selected,dicex,dicey));
+                        sb.append(" with ");
+                        sb.append(context.getResources().getString(R.string.current_number_of_selections,diceNumberOfSelections));
+                    }
+                    Log.d("MultiplayerInteractor", sb.toString());
+                    //Needs to unlock the loading screen and also prevent people form submitting suggestions too early
+                    callback.onDisplayInfo(sb.toString());
+                    break;
+                case HOST_READY_CHECK:
+                    callback.onHostReady();
+                    break;
+                default:
+                    Log.d("MultiplayerInteractor", "normal data");
+
+                    break;
             }
         }
     }
@@ -94,6 +100,7 @@ public class MultiplayerJoinRollFragmentInteractor {
 
     public interface Callback{
         void onDisplayInfo(String info);
+        void onHostReady();
         void onHideSelection();
         void onShowSelection();
     }

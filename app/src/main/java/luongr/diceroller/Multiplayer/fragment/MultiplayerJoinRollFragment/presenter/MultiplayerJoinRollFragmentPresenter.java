@@ -27,6 +27,12 @@ public class MultiplayerJoinRollFragmentPresenter {
             }
 
             @Override
+            public void onHostReady() {
+                view.hideLoadingDialog();
+                view.onWriteToHost();
+            }
+
+            @Override
             public void onHideSelection() {
                 //do nothing
             }
@@ -50,6 +56,11 @@ public class MultiplayerJoinRollFragmentPresenter {
         interactor.checkMaxSelections(new MultiplayerJoinRollFragmentInteractor.Callback() {
             @Override
             public void onDisplayInfo(String info) {
+                //do nothing
+            }
+
+            @Override
+            public void onHostReady() {
                 //do nothing
             }
 

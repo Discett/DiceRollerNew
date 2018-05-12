@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,17 +23,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
+import luongr.diceroller.Dialogs.Confirmation.view.DialogConfirmation;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.model.MultiplayerHostRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.IMultiplayerHostRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.MultiplayerHostRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
 import luongr.diceroller.R;
 
+import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.HOST_READY;
+
 /**
  * Created by Luong Randy on 1/16/2018.
  */
 
-public class MultiplayerHostRollFragment extends Fragment {
+public class MultiplayerHostRollFragment extends Fragment implements DialogConfirmation.IDialogConfirmation{
 
     @BindView(R.id.rvUserSelections)
     RecyclerView rvSelection;
@@ -113,7 +117,11 @@ public class MultiplayerHostRollFragment extends Fragment {
 
     @OnClick(R.id.btnConfirmSelections)
     public void onConfirm(){
-        //TODO: confirm dialog to new roll screen.
+        DialogConfirmation confirmation = DialogConfirmation.dialogInstance(
+                getResources().getString(R.string.confirm_host_message),
+                getResources().getString(R.string.confirm),
+                getResources().getString(R.string.deny));
+        confirmation.show(getFragmentManager(),getResources().getString(R.string.dialog_confirm));
     }
 
     public void setSocket(BluetoothSocket socket) {
@@ -128,5 +136,22 @@ public class MultiplayerHostRollFragment extends Fragment {
     public void showAddSelection() {
         btnAddSelection.setVisibility(View.VISIBLE);
         edtSelection.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBtn1(DialogFragment dialog) {
+        //onSend
+        //Waits for all players to be in then goes to new fragment w/ all selections
+        mpBluetoothService.write(HOST_READY.getBytes());
+        dialog.dismiss();
+        //TODO: Either we move to another fragment but we need to carry the data across, or we do it in one fragment
+        //TODO: Wait until host is ready before players send their message! (hard)
+
+    }
+
+    @Override
+    public void onBtn2(DialogFragment dialog) {
+        //onDismiss
+        dialog.dismiss();
     }
 }

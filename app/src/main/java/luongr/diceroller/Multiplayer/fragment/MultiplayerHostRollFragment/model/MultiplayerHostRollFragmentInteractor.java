@@ -17,6 +17,7 @@ import luongr.diceroller.Selection;
 
 public class MultiplayerHostRollFragmentInteractor {
     List<Selection> selectionList = new ArrayList<>();
+    List<Selection> playersSelectionList = new ArrayList<>();
     Dice dice = Dice.getInstance();
     Context context;
 
@@ -41,6 +42,8 @@ public class MultiplayerHostRollFragmentInteractor {
             for(int i = 0; i < parse.length; i++){
                 //TODO: add parsed messages to the list, then find a way to sanitize the string
                 //before sending it, weed out the delimiters.
+                Selection temp = new Selection(parse[i]);
+                playersSelectionList.add(temp);
                 Log.d("Parsed Message", parse[i]);
             }
         }
