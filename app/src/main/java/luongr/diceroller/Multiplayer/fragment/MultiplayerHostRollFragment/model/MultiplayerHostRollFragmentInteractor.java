@@ -43,7 +43,8 @@ public class MultiplayerHostRollFragmentInteractor {
                 //TODO: add parsed messages to the list, then find a way to sanitize the string
                 //before sending it, weed out the delimiters.
                 Selection temp = new Selection(parse[i]);
-                playersSelectionList.add(temp);
+                //playersSelectionList.add(temp);
+                selectionList.add(temp);
                 Log.d("Parsed Message", parse[i]);
             }
         }

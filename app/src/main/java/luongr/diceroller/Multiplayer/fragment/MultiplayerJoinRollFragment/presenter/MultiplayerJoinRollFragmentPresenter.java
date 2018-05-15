@@ -30,6 +30,7 @@ public class MultiplayerJoinRollFragmentPresenter {
             public void onHostReady() {
                 view.hideLoadingDialog();
                 view.onWriteToHost();
+                view.onShowMultiplayerJoinFinalFragment();
             }
 
             @Override

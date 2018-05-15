@@ -1,6 +1,7 @@
 package luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.view;
 
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,7 @@ import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
 import luongr.diceroller.Dialogs.Confirmation.view.DialogConfirmation;
 import luongr.diceroller.Dialogs.Loading.view.DialogLoading;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view.MultiplayerHostRollFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.model.MultiplayerJoinRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.presenter.MultiplayerJoinRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
@@ -48,6 +50,7 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     MultiplayerBluetoothService mpBluetoothService;
     MultiplayerJoinRollFragmentPresenter presenter;
     SelectionAdapter adapter;
+    IMultiplayerJoinRollFragment listener;
 
     @Nullable
     @Override
@@ -63,6 +66,17 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
         mpBluetoothService = new MultiplayerBluetoothService(socket, mHandler);
         setUpFragment();
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (IMultiplayerJoinRollFragment) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() +
+                    " must implement IMultiplayerJoinRollFragment");
+        }
     }
 
     public void showEdtSelection() {
@@ -157,5 +171,13 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
 
     public void onWriteToHost() {
         mpBluetoothService.write(presenter.getByteArray());
+    }
+
+    public void onShowMultiplayerJoinFinalFragment(){
+        listener.onShowMultiplayerJoinFinalFragment(socket);
+    }
+
+    public interface IMultiplayerJoinRollFragment{
+        public void onShowMultiplayerJoinFinalFragment(BluetoothSocket socket);
     }
 }

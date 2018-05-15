@@ -8,28 +8,40 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import luongr.diceroller.Dialogs.Options.view.DialogOptions;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFinalFragment.view.MultiplayerHostFinalFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFragment.view.MultiplayerHostFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view.MultiplayerHostRollFragment;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFinalFragment.view.MultiplayerJoinFinalFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFragment.view.MultiplayerJoinFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.view.MultiplayerJoinRollFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerStartFragment.view.MultiplayerStartFragment;
+import luongr.diceroller.Multiplayer.interactor.MultiplayerActivityInteractor;
+import luongr.diceroller.Multiplayer.presenter.IMultiplayerActivityPresenter;
+import luongr.diceroller.Multiplayer.presenter.MultiplayerActivityPresenter;
 import luongr.diceroller.R;
+import luongr.diceroller.Selection;
 
 public class MultiplayerActivity extends AppCompatActivity implements IMultiplayerActivity,
         MultiplayerStartFragment.IMultiplayerStartMenu, MultiplayerJoinFragment.IMultiplayerJoinListener,
-        MultiplayerHostFragment.IMultiplayerHostListener {
+        MultiplayerHostFragment.IMultiplayerHostListener, MultiplayerHostFinalFragment.IMultiplayerHostFinalFragment,
+        MultiplayerHostRollFragment.IMultiplayerHostRollFragment, MultiplayerJoinRollFragment.IMultiplayerJoinRollFragment{
     @BindView(R.id.fragmentContainer)
     FrameLayout fragmentContainer;
     DialogOptions dialogOptions;
+    IMultiplayerActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
         ButterKnife.bind(this);
+        presenter = new MultiplayerActivityPresenter(new MultiplayerActivityInteractor());
+
         Log.d("MultiplayerActivity","onActivityStart");
         showStartMenu();
     }
@@ -104,6 +116,34 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer,hostRollFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onShowMultiplayerHostFinal(BluetoothSocket socket) {
+        MultiplayerHostFinalFragment hostFinalFragment = new MultiplayerHostFinalFragment();
+        hostFinalFragment.setSocket(socket);
+        hostFinalFragment.setSelectionList(presenter.getSelectionList());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer,hostFinalFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onFinalizedSelectionList(List<Selection> selectionList) {
+        presenter.setSelectionList(selectionList);
+    }
+
+    @Override
+    public void onShowMultiplayerJoinFinalFragment(BluetoothSocket socket) {
+        MultiplayerJoinFinalFragment joinFinalFragment = new MultiplayerJoinFinalFragment();
+        joinFinalFragment.setSocket(socket);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer,joinFinalFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

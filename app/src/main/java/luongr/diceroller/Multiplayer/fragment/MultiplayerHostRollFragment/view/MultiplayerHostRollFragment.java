@@ -1,10 +1,10 @@
 package luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view;
 
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,7 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,7 @@ import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presen
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.presenter.MultiplayerHostRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
 import luongr.diceroller.R;
+import luongr.diceroller.Selection;
 
 import static luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService.MessageConstants.HOST_READY;
 
@@ -47,10 +49,22 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
     @BindView(R.id.txtUserSelectionHeader)
     TextView txtUserSelectionHeader;
 
+    IMultiplayerHostRollFragment listener;
     MultiplayerBluetoothService mpBluetoothService;
     BluetoothSocket socket = null;
     IMultiplayerHostRollFragmentPresenter presenter;
     SelectionAdapter adapter;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (IMultiplayerHostRollFragment) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() +
+                    " must implement IMultiplayerHostRollFragment");
+        }
+    }
 
     @Nullable
     @Override
@@ -144,8 +158,10 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
         //Waits for all players to be in then goes to new fragment w/ all selections
         mpBluetoothService.write(HOST_READY.getBytes());
         dialog.dismiss();
-        //TODO: Either we move to another fragment but we need to carry the data across, or we do it in one fragment
         //TODO: Wait until host is ready before players send their message! (hard)
+        listener.onFinalizedSelectionList(presenter.getSelectionList());
+        listener.onShowMultiplayerHostFinal(socket);
+        //TODO: Either we move to another fragment but we need to carry the data across, or we do it in one fragment
 
     }
 
@@ -153,5 +169,10 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
     public void onBtn2(DialogFragment dialog) {
         //onDismiss
         dialog.dismiss();
+    }
+
+    public interface IMultiplayerHostRollFragment{
+        public void onFinalizedSelectionList(List<Selection> selectionList);
+        public void onShowMultiplayerHostFinal(BluetoothSocket socket);
     }
 }

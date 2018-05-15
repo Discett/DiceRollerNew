@@ -155,7 +155,6 @@ public class MultiplayerJoinFragment extends Fragment {
     public void setSocket(BluetoothSocket socket) {
         this.socket = socket;
         listener.onShowJoinRollMenu(socket);
-        //TODO: continue this train of thought
         //socket is now here and since it's successful you change the views pass socket to view?
     }
 
