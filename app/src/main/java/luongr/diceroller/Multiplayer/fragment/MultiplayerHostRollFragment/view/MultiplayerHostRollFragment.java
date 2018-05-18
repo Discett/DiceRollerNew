@@ -97,10 +97,11 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
                     //now we can convert the byte to string
                     //set up readMessage like this so we get the appropriate size for string via arg1
                     String readMessage = new String(readBuffer, 0, msg.arg1);
-                    presenter.parseMessageList(readMessage);
+                    //presenter.parseMessageList(readMessage);
                     //Log.d("HostReadMessage",readMessage);
                     //Log.d("HostReadMessage",String.valueOf(msg.arg1));
                     //Log.d("HostReadMessage",String.valueOf(msg.arg2));
+                    //TODO: do the rolling for this completed list and send over to join 
                     break;
             }
         }
@@ -117,7 +118,7 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
     }
 
     private void setUpRV() {
-         adapter = new SelectionAdapter(getContext(), presenter.getSelectionList(), new SelectionAdapter.Callback() {
+         adapter = new SelectionAdapter(getContext(), presenter.getSelectionList(), true, new SelectionAdapter.Callback() {
             @Override
             public void onRemoved() {
                 //might need to run a check to see the number of available selections
@@ -160,7 +161,7 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
         dialog.dismiss();
         //TODO: Wait until host is ready before players send their message! (hard)
         listener.onFinalizedSelectionList(presenter.getSelectionList());
-        listener.onShowMultiplayerHostFinal(socket);
+        listener.onShowMultiplayerHostFinal(mpBluetoothService);
         //TODO: Either we move to another fragment but we need to carry the data across, or we do it in one fragment
 
     }
@@ -173,6 +174,6 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
 
     public interface IMultiplayerHostRollFragment{
         public void onFinalizedSelectionList(List<Selection> selectionList);
-        public void onShowMultiplayerHostFinal(BluetoothSocket socket);
+        public void onShowMultiplayerHostFinal(MultiplayerBluetoothService service);
     }
 }

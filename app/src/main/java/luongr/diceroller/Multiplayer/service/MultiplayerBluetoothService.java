@@ -33,6 +33,10 @@ public class MultiplayerBluetoothService {
         connectedThread.write(bytes);
     }
 
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
+    }
+
 
     // Defines several constants used when transmitting messages between the
     // service and the UI.

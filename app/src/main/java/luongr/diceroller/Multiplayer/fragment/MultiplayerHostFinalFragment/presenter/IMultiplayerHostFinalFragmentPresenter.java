@@ -11,4 +11,6 @@ import luongr.diceroller.Selection;
 public interface IMultiplayerHostFinalFragmentPresenter {
     void setSelectionList(List<Selection> selectionList);
     List<Selection> getSelectionList();
+
+    void parseMessageList(String readMessage);
 }

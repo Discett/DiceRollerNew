@@ -25,11 +25,13 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.View
     private List<Selection> selectionList;
     private Callback callback;
     private Dice dice;
+    private boolean removable = true;
 
-    public SelectionAdapter(Context context, List<Selection> selectionList, Callback callback) {
+    public SelectionAdapter(Context context, List<Selection> selectionList, boolean removable, Callback callback) {
         this.context = context;
         this.callback = callback;
         this.selectionList = selectionList;
+        this.removable = removable;
     }
 
     @Override
@@ -56,6 +58,11 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.View
             holder.txtSelectionRoll.setText(String.valueOf(selectionList.get(position).getRollResult()));
         } else {
             holder.txtSelectionRoll.setText("");
+        }
+        if(removable){
+            holder.btnRemove.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnRemove.setVisibility(View.INVISIBLE);
         }
     }
 

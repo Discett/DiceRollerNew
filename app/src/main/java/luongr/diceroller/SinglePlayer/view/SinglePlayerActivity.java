@@ -63,7 +63,7 @@ public class SinglePlayerActivity extends AppCompatActivity implements ISinglePl
     }
 
     private void setUpRecyclerView() {
-        adapter = new SelectionAdapter(this, presenter.getSelectionList(), new SelectionAdapter.Callback() {
+        adapter = new SelectionAdapter(this, presenter.getSelectionList(),true , new SelectionAdapter.Callback() {
             @Override
             public void onRemoved() {
                 presenter.checkListEntries();

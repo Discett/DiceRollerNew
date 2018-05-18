@@ -23,6 +23,7 @@ import luongr.diceroller.Multiplayer.fragment.MultiplayerStartFragment.view.Mult
 import luongr.diceroller.Multiplayer.interactor.MultiplayerActivityInteractor;
 import luongr.diceroller.Multiplayer.presenter.IMultiplayerActivityPresenter;
 import luongr.diceroller.Multiplayer.presenter.MultiplayerActivityPresenter;
+import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
 import luongr.diceroller.R;
 import luongr.diceroller.Selection;
 
@@ -121,9 +122,10 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
     }
 
     @Override
-    public void onShowMultiplayerHostFinal(BluetoothSocket socket) {
+    public void onShowMultiplayerHostFinal(MultiplayerBluetoothService service) {
+        Log.d("OnShowMPFinal","before or after parse?");
         MultiplayerHostFinalFragment hostFinalFragment = new MultiplayerHostFinalFragment();
-        hostFinalFragment.setSocket(socket);
+        hostFinalFragment.setService(service);
         hostFinalFragment.setSelectionList(presenter.getSelectionList());
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -138,9 +140,9 @@ public class MultiplayerActivity extends AppCompatActivity implements IMultiplay
     }
 
     @Override
-    public void onShowMultiplayerJoinFinalFragment(BluetoothSocket socket) {
+    public void onShowMultiplayerJoinFinalFragment(MultiplayerBluetoothService service) {
         MultiplayerJoinFinalFragment joinFinalFragment = new MultiplayerJoinFinalFragment();
-        joinFinalFragment.setSocket(socket);
+        joinFinalFragment.setService(service);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer,joinFinalFragment);

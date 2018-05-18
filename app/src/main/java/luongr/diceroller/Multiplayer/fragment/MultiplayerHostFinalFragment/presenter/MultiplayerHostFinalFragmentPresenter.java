@@ -27,4 +27,9 @@ public class MultiplayerHostFinalFragmentPresenter implements IMultiplayerHostFi
     public List<Selection> getSelectionList() {
         return interactor.getSelectionList();
     }
+
+    @Override
+    public void parseMessageList(String readMessage) {
+        interactor.parseMessageList(readMessage);
+    }
 }

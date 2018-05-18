@@ -25,7 +25,6 @@ import butterknife.OnClick;
 import luongr.diceroller.Adapters.Selection.SelectionAdapter;
 import luongr.diceroller.Dialogs.Confirmation.view.DialogConfirmation;
 import luongr.diceroller.Dialogs.Loading.view.DialogLoading;
-import luongr.diceroller.Multiplayer.fragment.MultiplayerHostRollFragment.view.MultiplayerHostRollFragment;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.model.MultiplayerJoinRollFragmentInteractor;
 import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinRollFragment.presenter.MultiplayerJoinRollFragmentPresenter;
 import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
@@ -90,7 +89,7 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     }
 
     private void setUpFragment() {
-        adapter = new SelectionAdapter(getContext(), presenter.getListOfSelection(), new SelectionAdapter.Callback() {
+        adapter = new SelectionAdapter(getContext(), presenter.getListOfSelection(), true, new SelectionAdapter.Callback() {
             @Override
             public void onRemoved() {
                 presenter.checkMaxSelections();
@@ -174,10 +173,10 @@ public class MultiplayerJoinRollFragment extends Fragment implements DialogConfi
     }
 
     public void onShowMultiplayerJoinFinalFragment(){
-        listener.onShowMultiplayerJoinFinalFragment(socket);
+        listener.onShowMultiplayerJoinFinalFragment(mpBluetoothService);
     }
 
     public interface IMultiplayerJoinRollFragment{
-        public void onShowMultiplayerJoinFinalFragment(BluetoothSocket socket);
+        public void onShowMultiplayerJoinFinalFragment(MultiplayerBluetoothService mpBluetoothService);
     }
 }
