@@ -4,7 +4,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import luongr.diceroller.Dice;
 import luongr.diceroller.Selection;
 
 /**
@@ -13,6 +15,7 @@ import luongr.diceroller.Selection;
 
 public class MultiplayerHostFinalInteractor {
     List<Selection> selectionList = new ArrayList<>();
+    Dice dice = Dice.getInstance();
 
     public void setSelectionList(List<Selection> selectionList) {
         this.selectionList = selectionList;
@@ -37,5 +40,15 @@ public class MultiplayerHostFinalInteractor {
                 Log.d("Parsed Message", parse[i]);
             }
         }
+    }
+
+    public void onRandomSelection(Callback callback) {
+        //TODO: change this if you ever wanted to do elimiation style.
+        Random random = new Random();
+        callback.onRandomSelected(selectionList.get(random.nextInt(selectionList.size())).getName());
+    }
+
+    public interface Callback {
+        public void onRandomSelected(String selection);
     }
 }

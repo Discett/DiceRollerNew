@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -35,11 +36,13 @@ public class MultiplayerHostFinalFragment extends Fragment implements IMultiplay
 
     MultiplayerBluetoothService mpBS;
     BluetoothSocket socket = null;
-    IMultiplayerHostFinalFragmentPresenter presenter = new MultiplayerHostFinalFragmentPresenter(new MultiplayerHostFinalInteractor());
+    IMultiplayerHostFinalFragmentPresenter presenter = new MultiplayerHostFinalFragmentPresenter(this,new MultiplayerHostFinalInteractor());
     @BindView(R.id.btnRoll)
     Button btnRoll;
     @BindView(R.id.rvSelectionList)
     RecyclerView rvSelectionList;
+    @BindView(R.id.txtSelectionWinner)
+    TextView txtSelectionWinner;
     SelectionAdapter adapter;
 
     @Nullable
@@ -85,6 +88,7 @@ public class MultiplayerHostFinalFragment extends Fragment implements IMultiplay
                     Log.d("HostReadMessageFinal",readMessage);
                     presenter.parseMessageList(readMessage);
                     adapter.notifyDataSetChanged();
+                    //TODO: do the rolling for this completed list and send over to join
                     //Log.d("HostReadMessage",String.valueOf(msg.arg1));
                     //Log.d("HostReadMessage",String.valueOf(msg.arg2));
                     break;
@@ -95,10 +99,10 @@ public class MultiplayerHostFinalFragment extends Fragment implements IMultiplay
     @OnClick(R.id.btnRoll)
     public void onRoll(){
         //Rolls and sends the winner to everyone.
-        //TODO: socket stuff
-        mpBS.write("Verify That This Works".getBytes());
+        presenter.onRandomSelection();
+        //mpBS.write("Verify That This Works".getBytes());
         //Log.d("FinalFragmentSocket",socket.toString());
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
         //Log.d("FinalSelectionList",presenter.getSelectionList().toString());
     }
 
@@ -125,6 +129,14 @@ public class MultiplayerHostFinalFragment extends Fragment implements IMultiplay
 
     public void setService(MultiplayerBluetoothService service) {
         mpBS = service;
+    }
+
+    public void onSendToJoin(String selection) {
+        mpBS.write(selection.getBytes());
+    }
+
+    public void onSetSelectionWinner(String selection) {
+        txtSelectionWinner.setText(selection);
     }
 
     public interface IMultiplayerHostFinalFragment{

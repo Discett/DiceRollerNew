@@ -101,7 +101,6 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
                     //Log.d("HostReadMessage",readMessage);
                     //Log.d("HostReadMessage",String.valueOf(msg.arg1));
                     //Log.d("HostReadMessage",String.valueOf(msg.arg2));
-                    //TODO: do the rolling for this completed list and send over to join 
                     break;
             }
         }
@@ -162,8 +161,6 @@ public class MultiplayerHostRollFragment extends Fragment implements DialogConfi
         //TODO: Wait until host is ready before players send their message! (hard)
         listener.onFinalizedSelectionList(presenter.getSelectionList());
         listener.onShowMultiplayerHostFinal(mpBluetoothService);
-        //TODO: Either we move to another fragment but we need to carry the data across, or we do it in one fragment
-
     }
 
     @Override

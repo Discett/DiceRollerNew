@@ -10,9 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerJoinFinalFragment.presenter.MultiplayerJoinFinalPresenter;
 import luongr.diceroller.Multiplayer.service.MultiplayerBluetoothService;
 import luongr.diceroller.R;
 
@@ -23,12 +26,16 @@ import luongr.diceroller.R;
 public class MultiplayerJoinFinalFragment extends Fragment {
     BluetoothSocket socket = null;
     MultiplayerBluetoothService mpBS;
+    MultiplayerJoinFinalPresenter presenter;
+    @BindView(R.id.txtSelectionWinner)
+    TextView txtSelectionWinner;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_multiplayer_host_final,container,false);
+        View view = inflater.inflate(R.layout.fragment_multiplayer_join_final,container,false);
         ButterKnife.bind(this,view);
+        presenter = new MultiplayerJoinFinalPresenter(this);
         if(socket == null){
             Log.d("MultiplayerJoinRoll", "Null Socket");
         }
@@ -50,6 +57,7 @@ public class MultiplayerJoinFinalFragment extends Fragment {
                     //set up readMessage like this so we get the appropriate size for string via arg1
                     String readMessage = new String(readBuffer, 0, msg.arg1);
                     //presenter.parseMessageList(readMessage);
+                    presenter.onGetSelectionWinner(readMessage);
                     Log.d("HostReadMessages!",readMessage);
                     //Log.d("HostReadMessage",String.valueOf(msg.arg1));
                     //Log.d("HostReadMessage",String.valueOf(msg.arg2));
@@ -62,12 +70,11 @@ public class MultiplayerJoinFinalFragment extends Fragment {
         this.socket = socket;
     }
 
-    @OnClick(R.id.btnRoll)
-    public void onRoll(){
-        mpBS.write("hello message back".getBytes());
-    }
-
     public void setService(MultiplayerBluetoothService service) {
         mpBS = service;
+    }
+
+    public void setSelectionWinner(String message) {
+        txtSelectionWinner.setText(message);
     }
 }

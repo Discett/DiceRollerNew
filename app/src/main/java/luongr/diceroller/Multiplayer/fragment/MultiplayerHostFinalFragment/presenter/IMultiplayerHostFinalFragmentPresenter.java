@@ -13,4 +13,6 @@ public interface IMultiplayerHostFinalFragmentPresenter {
     List<Selection> getSelectionList();
 
     void parseMessageList(String readMessage);
+
+    void onRandomSelection();
 }

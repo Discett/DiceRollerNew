@@ -3,6 +3,7 @@ package luongr.diceroller.Multiplayer.fragment.MultiplayerHostFinalFragment.pres
 import java.util.List;
 
 import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFinalFragment.interactor.MultiplayerHostFinalInteractor;
+import luongr.diceroller.Multiplayer.fragment.MultiplayerHostFinalFragment.view.MultiplayerHostFinalFragment;
 import luongr.diceroller.Selection;
 
 /**
@@ -12,10 +13,12 @@ import luongr.diceroller.Selection;
 public class MultiplayerHostFinalFragmentPresenter implements IMultiplayerHostFinalFragmentPresenter {
 
     MultiplayerHostFinalInteractor interactor;
+    MultiplayerHostFinalFragment view;
 
 
-    public MultiplayerHostFinalFragmentPresenter(MultiplayerHostFinalInteractor interactor) {
+    public MultiplayerHostFinalFragmentPresenter(MultiplayerHostFinalFragment view, MultiplayerHostFinalInteractor interactor) {
         this.interactor = interactor;
+        this.view = view;
     }
 
     @Override
@@ -31,5 +34,16 @@ public class MultiplayerHostFinalFragmentPresenter implements IMultiplayerHostFi
     @Override
     public void parseMessageList(String readMessage) {
         interactor.parseMessageList(readMessage);
+    }
+
+    @Override
+    public void onRandomSelection() {
+        interactor.onRandomSelection(new MultiplayerHostFinalInteractor.Callback() {
+            @Override
+            public void onRandomSelected(String selection) {
+                view.onSendToJoin(selection);
+                view.onSetSelectionWinner(selection);
+            }
+        });
     }
 }
