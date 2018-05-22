@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import luongr.diceroller.Multiplayer.view.MultiplayerActivity;
 import luongr.diceroller.SinglePlayer.view.SinglePlayerActivity;
 
 public class StartMenu extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class StartMenu extends AppCompatActivity {
     }
     @OnClick(R.id.btnMultiplayer)
     void onMultiplayer(){
-
+        Intent intent = new Intent(this,MultiplayerActivity.class);
+        startActivity(intent);
     }
 }

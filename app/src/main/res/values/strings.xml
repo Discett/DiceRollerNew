@@ -7,8 +7,23 @@
     <string name="action_settings">action_settings</string>
     <string name="current_dice_selected">Current Dice Selection: %1$d</string>
     <string name="current_dice_range_selected">Current Dice Range: %1$d - %2$d</string>
-    <string name="current_number_of_selections">Max Selections: %1$d</string>
+    <string name="current_number_of_selections">Max Input Selections: %1$d</string>
+    <string name="item_list_host">%1$d. %2$s</string>
     <string name="error_invalid">Invalid: %1$s</string>
     <string name="set_custom_range">Set custom dice range</string>
-
+    <string name="join">Join</string>
+    <string name="host">Host</string>
+    <string name="scan_start_host">Create Server</string>
+    <string name="scan_stop_host">Everyone\'s in!</string>
+    <string name="lock_selections">Lock Selections</string>
+    <string name="send">Send</string>
+    <string name="user_selections">Your current selections:</string>
+    <string name="waiting_for_host">Waiting for Host</string>
+    <string name="dont_send">Don\'t Send</string>
+    <string name="confirm_send_message">You can only send your list once, are you sure you want to send your list?</string>
+    <string name="confirm_host_message">Are you content with your list?</string>
+    <string name="dialog_confirm">dialog_confirm</string>
+    <string name="dialog_cancel">dialog_cancel</string>
+    <string name="confirm">confirm</string>
+    <string name="deny">deny</string>
 </resources>
